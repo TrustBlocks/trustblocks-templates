@@ -13,7 +13,7 @@ which extends the shared `MunicipalAgreement`.
 
 `logic/clause.clj` answers two requests:
 
-- **`BoardApprovalRequest`** (`com.trustblocks.municipal.employment.execution`)
+- **`BoardApprovalRequest`**
   records the Board's approval, once — a second approval is refused. The
   contract's state becomes `APPROVED`, valid from the meeting date.
   `request.json` is that request.

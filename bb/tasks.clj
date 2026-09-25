@@ -45,6 +45,18 @@
         (let [form (read {:eof ::eof} r)]
           (if (= ::eof form) forms (recur (conj forms form))))))))
 
+(defn- own-namespaces
+  "The namespaces a template declares itself: every model/*.cto except the
+  vendored imports -- Accord's (@models.accordproject.org.*) and copies of
+  ours from shared/model/."
+  [ctos]
+  (let [shared (set (map (comp str fs/file-name) (fs/glob "shared/model" "*.cto")))]
+    (->> ctos
+         (remove #(str/starts-with? (str (fs/file-name %)) "@"))
+         (remove #(shared (str (fs/file-name %))))
+         (keep #(second (re-find #"(?m)^namespace\s+(\S+)" (slurp (str %)))))
+         distinct)))
+
 (defn- problems
   "Why template `dir` is not a valid template, as a seq of strings."
   [dir]
@@ -64,6 +76,13 @@
      (when (str/blank? (get accord "cicero"))
        ["package.json has no accordproject.cicero range"])
      (when (empty? ctos) ["no model/*.cto"])
+     ;; One namespace of its own, as in Accord's own template library --
+     ;; everything else a template needs is imported. See
+     ;; docs/model-conventions.md.
+     (let [own (own-namespaces ctos)]
+       (when (and (seq ctos) (not= 1 (count own)))
+         [(str "a template declares exactly one namespace of its own; found "
+               (count own) ": " (str/join ", " own))]))
      (when-not grammar ["no text/grammar.tem.md"])
      (when-not (get sample "$class") ["sample.json missing, or has no $class"])
 

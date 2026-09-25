@@ -1,6 +1,7 @@
 namespace com.trustblocks.municipal.employment@1.0.0
 
 import com.trustblocks.municipal.agreement@1.0.0.MunicipalAgreement
+import org.accordproject.runtime@0.2.0.{Request, Response} from https://models.accordproject.org/accordproject/runtime@0.2.0.cto
 
 /**
  * Municipal manager employment contract.
@@ -120,4 +121,40 @@ asset ManagerEmployment extends MunicipalAgreement {
   o String presidingOfficerTitle
   o String clerkName
   o String clerkTitle
+}
+
+// ---- Execution ----------------------------------------------------------
+//
+// The Board-approval state machine: what this contract's clause
+// (logic/clause.clj) is triggered with, what it answers, and the state it
+// keeps. In the template's own namespace, as every Accord template keeps
+// its Request/Response/State types -- one namespace per template, not a
+// second one for execution.
+
+enum ContractStatus {
+  o DRAFTED
+  o APPROVED
+}
+
+concept ManagerEmploymentState identified by contractId {
+  o String contractId
+  o ContractStatus status
+  o DateTime approvedAt optional
+  o DateTime effectiveDate optional
+}
+
+// Request/Response come from org.accordproject.runtime, the registry's own
+// base types for what a clause is triggered with and what it answers --
+// the same pair Accord's reference template extends
+// (`transaction LateDeliveryAndPenaltyRequest extends Request`). Both are
+// empty markers; the value is that a runtime can recognise these as a
+// trigger pair rather than as two unrelated transactions.
+transaction BoardApprovalRequest extends Request {
+  o DateTime requestedAt
+}
+
+transaction BoardApprovalResponse extends Response {
+  o ContractStatus status
+  o DateTime approvedAt
+  o DateTime effectiveDate
 }

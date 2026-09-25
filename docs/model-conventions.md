@@ -11,9 +11,16 @@ Reverse domain, from `trustblocks.com`:
 | --- | --- |
 | `com.trustblocks.municipal.agreement@1.0.0` | `MunicipalAgreement`, the abstract base every agreement extends |
 | `com.trustblocks.attestation@1.0.0` | `AttestationRequest` / `AttestationResponse`, the standard pair a contract's clause adopts to support officeholder attestation |
-| `com.trustblocks.municipal.employment@1.0.0` | `ManagerEmployment`, the manager employment contract's root model |
-| `com.trustblocks.municipal.employment.execution@1.0.0` | its board-approval state machine |
+| `com.trustblocks.municipal.employment@1.0.0` | `ManagerEmployment`, the manager employment contract's root model, and its Board-approval Request/Response/State |
 | `com.trustblocks.municipal.construction@1.0.0` | `StreetResurfacingContract`, a unit-price public works construction contract, with `BidItem`, `StreetSegment` and `Addendum` |
+
+**One namespace of its own per template.** As in Accord's own template
+library -- where 35 of 37 active templates declare exactly one -- a template's
+root type, its Request/Response/State types and any concepts only it uses all
+live in its own namespace. Everything else it needs is imported: Accord's
+published models (`contract`, `runtime`, `usa.state`, ...) and, until they are
+published at stable URLs of their own, our shared models vendored from
+`shared/model/`. `bb check` enforces this.
 
 **No jurisdiction in the namespace.** The manager employment model was
 inherited as `us.nc.municipal.manageremployment@0.1.0`, which bakes North

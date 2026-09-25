@@ -8,7 +8,7 @@ import org.accordproject.runtime@0.2.0.{Request, Response} from https://models.a
  * always calls execute/trigger! with an AttestationRequest, so any
  * contract wanting attestation support imports these two types and adds
  * one branch to its own stored clause, the same way
- * com.trustblocks.municipal.employment.execution@1.0.0's
+ * com.trustblocks.municipal.employment@1.0.0's
  * BoardApprovalRequest/Response are one branch of that contract's clause.
  *
  * Deliberately generic and reusable, unlike a contract's own execution

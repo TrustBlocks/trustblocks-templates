@@ -13,12 +13,12 @@
      :else
      (let [approved-at (get data "councilActionDate")
            effective   (get data "effectiveDate")]
-       {:response {"$class" "com.trustblocks.municipal.employment.execution@1.0.0.BoardApprovalResponse"
+       {:response {"$class" "com.trustblocks.municipal.employment@1.0.0.BoardApprovalResponse"
                    "$timestamp" now
                    "status" "APPROVED"
                    "approvedAt" approved-at
                    "effectiveDate" effective}
-        :state {"$class" "com.trustblocks.municipal.employment.execution@1.0.0.ManagerEmploymentState"
+        :state {"$class" "com.trustblocks.municipal.employment@1.0.0.ManagerEmploymentState"
                 "contractId" (get data "contractId")
                 "status" "APPROVED"
                 "approvedAt" approved-at
