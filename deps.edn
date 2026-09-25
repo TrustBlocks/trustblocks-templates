@@ -1,0 +1,4 @@
+;; Consumed by Trustblocks as a git dependency: every template directory is on
+;; the classpath under its own name, e.g. (io/resource
+;; "manager-employment-contract/package.json").
+{:paths ["templates"]}

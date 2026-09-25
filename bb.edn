@@ -1,0 +1,8 @@
+{:paths ["bb"]
+ :tasks {:requires ([tasks])
+         check       {:doc  "Structure, logic, shared-model copies, CommonMark rules (no Node)"
+                      :task (tasks/check)}
+         build       {:doc  "Zip every template into dist/<name>@<version>.cta"
+                      :task (tasks/build)}
+         conformance {:doc  "Every template loads and drafts through Accord's own engine (npm install once)"
+                      :task (shell "node_modules/.bin/nbb" "dev/conformance.cljs")}}}
