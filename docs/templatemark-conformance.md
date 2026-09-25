@@ -15,7 +15,7 @@ bb conformance
 
 ```
 Accord conformance: 2 template(s) under templates
-  ok    manager-employment-contract@0.1.0  (18126 chars drafted)
+  ok    manager-employment-contract@0.2.0  (18126 chars drafted)
   ok    street-resurfacing-contract@0.1.0  (124382 chars drafted)
 ```
 
