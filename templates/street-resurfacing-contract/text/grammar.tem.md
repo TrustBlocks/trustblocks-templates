@@ -227,45 +227,45 @@ IN WITNESS WHEREOF, the Town of China Grove and the Contractor have caused this 
 
 TOWN OF CHINA GROVE:
 
-By: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+By: {{#optional managerSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 {{managerName}}, Town Manager
 
-Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Date: {{#optional managerSignedDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 ATTEST:
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+{{#optional clerkAttestation}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 {{clerkName}}, Town Clerk
 
 APPROVED AS TO FORM:
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+{{#optional townAttorneyApproval}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 Town Attorney, Town of China Grove
 
 {{#optional contractorName}}{{this}}{{else}}\[CONTRACTOR\]{{/optional}}
 
-By: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+By: {{#optional contractorSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 Signature of President / Vice President / Manager / Partner
 
-Printed Name: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Printed Name: {{#optional contractorSignatoryName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
-Title: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Title: {{#optional contractorSignatoryTitle}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
-Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Date: {{#optional contractorSignedDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 ATTEST:
 
-By: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+By: {{#optional contractorAttestation}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 Signature of Vice President, Secretary, or other officer
 
-Printed Name: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Printed Name: {{#optional contractorAttestName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
-Title: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Title: {{#optional contractorAttestTitle}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 (SEAL)
 
@@ -273,11 +273,11 @@ Title: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 This instrument has been pre-audited in the manner required by the Local Government Budget and Fiscal Control Act.
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+{{#optional financeOfficerSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 Finance Officer, Town of China Grove
 
-Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Date: {{#optional preAuditDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **EXHIBIT “A”**
 
@@ -575,10 +575,10 @@ Construction Requirements. All construction methods shall be in accordance with 
 Method of Measurement and Basis of Payment. The quantity of sealing existing pavement cracks and joints will be measured by the actual number of pounds of PS/AR material satisfactorily used to seal pavement cracks and joints on the designated streets. Any material spilled, used in excessive overbanding, wasted, misapplied, or unsatisfactorily used will be deducted in determining quantities for payment, as determined by the Director. The quantity of PS/AR material, measured as provided above, will be paid for at the contract unit price per pound.
 
 {{#ulist crackAndJointSealingItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Crack and Joint Sealing Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Crack and Joint Sealing Section Bid:** {{#optional crackAndJointSealingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Patching, Leveling, and Asphalt Seal Coating Section Bid**
 
@@ -605,10 +605,10 @@ Compaction, Density, and Maintenance. Begin compaction of the material immediate
 Method of Measurement and Basis of Payment. The quantity of hot mix asphalt pavement to be paid for will be the actual number of tons (U.S. Customary short ton, 2,000 lbs.) of each type incorporated into the completed and accepted work in accordance with Division 6, measured by being weighed in trucks on certified platform scales, paid at the contract unit price per ton. The quantity of suitable sub-base will be the actual number of cubic yards incorporated into the completed and accepted work, paid at the contract unit price per cubic yard. The quantity of asphalt seal coat will be the actual number of square yards incorporated into the completed and accepted work, paid at the contract unit price per square yard.
 
 {{#ulist patchingLevelingSealCoatItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Patching, Leveling, and Asphalt Seal Coating Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Patching, Leveling, and Asphalt Seal Coating Section Bid:** {{#optional patchingLevelingSealCoatTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Milling Section Bid**
 
@@ -621,10 +621,10 @@ Construction Requirements and Tolerance. The existing pavement shall be milled i
 Method of Measurement and Basis of Payment. The quantity of milled asphalt pavement to be paid for will be the actual number of square yards of pavement surface milled in accordance with Section 607, with length measured along the pavement surface and width as actually required or directed, paid at the contract unit price per square yard. Cost for milling irregular areas at intersections as directed by the Director will be considered incidental to the pay item for Edge Mill.
 
 {{#ulist millingItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Milling Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Milling Section Bid:** {{#optional millingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Reclamation Section Bid**
 
@@ -639,10 +639,10 @@ Compaction and Density Requirements. All compaction work and equipment shall be 
 Method of Measurement and Basis of Payment. The quantity of reclaimed section to be paid for will be the actual number of square yards of roadway surface reclaimed in accordance with Division 5, paid at the contract unit price per square yard. The quantity of Portland cement used to strengthen roadway sections or stabilize subgrade will be the actual number of square yards so treated, paid at the contract unit price per square yard. The quantity of approved suitable subgrade material will be paid at the contract unit price per cubic yard.
 
 {{#ulist reclamationItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Reclamation Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Reclamation Section Bid:** {{#optional reclamationTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Resurfacing Section Bid**
 
@@ -669,10 +669,10 @@ Maintenance and Acceptance. The Contractor shall maintain the plant mix pavement
 Method of Measurement and Basis of Payment. The quantity of hot mix asphalt pavement to be paid for will be the actual number of tons (U.S. Customary short ton, 2,000 lbs.) of each type incorporated into the completed and accepted work in accordance with Division 6, measured by being weighed in trucks on certified platform scales or other certified weighing devices, paid at the contract unit price per ton.
 
 {{#ulist resurfacingItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Resurfacing Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Resurfacing Section Bid:** {{#optional resurfacingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Concrete Section Bid**
 
@@ -689,10 +689,10 @@ Wheelchair Ramps and Sidewalks. Wheelchair access points to streets shall be con
 Method of Measurement and Basis of Payment. Curb and gutter: the actual linear feet measured along the surface of the top of the curb, or at the flow line where there is no curb, incorporated into the completed and accepted work in accordance with Section 846, paid at the contract unit price per linear foot. Wheelchair ramps: the actual number of ramps received, installed, and accepted in accordance with Section 848 and the Standard Drawings, paid at the contract unit price each. Sidewalk: the actual square yards received, installed, and accepted in accordance with Section 848 and the Standard Drawings, paid at the contract unit price per square yard.
 
 {{#ulist concreteItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Concrete Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Concrete Section Bid:** {{#optional concreteTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **Re-Striping, Re-Marking, and Replace Pavement Markers Section Bid**
 
@@ -707,10 +707,10 @@ Maintenance. Pavement striping and markings reinstalled by the Contractor that p
 Method of Measurement and Basis of Payment. The quantity to be paid for will be the actual number of permanent reflective thermoplastic pavement stripes, markings, and newly installed permanent pavement markers satisfactorily installed and accepted by the Director in accordance with Division 12 and specifically Sections 1205, 1250, and 1251 of the Standard Specifications and the Standard Drawings. The quantity of solid lines shall be the summation of the linear feet measured end to end. The quantity of skip or broken lines shall be the summation of the linear feet derived by multiplying the nominal length of a line by the number of marking lines placed. Payment will be at the contract unit price per linear foot or each, as stipulated below.
 
 {{#ulist pavementMarkingItems}}
-**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: \$\_\_\_\_\_\_\_\_\_\_
+**{{payItem}}** {{description}} — Quantity: {{#optional estimatedQuantity}}{{this as "0,0.00"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}} {{unit}} — Unit Price: {{#optional unitPrice}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}} — Amount: {{#optional amount}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{/ulist}}
 
-**Total — Re-Striping, Re-Marking, and Replace Pavement Marker Section Bid:** \$\_\_\_\_\_\_\_\_\_\_
+**Total — Re-Striping, Re-Marking, and Replace Pavement Marker Section Bid:** {{#optional pavementMarkingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_{{/optional}}
 
 **BID SHEET**
 
@@ -718,18 +718,17 @@ Method of Measurement and Basis of Payment. The quantity to be paid for will be 
 
 | **BASE BID** | **AMOUNT** |
 |----|----|
-| Crack and Joint Sealing Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Patching, Leveling, and Asphalt Seal Coating Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Milling Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Reclamation Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Resurfacing Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Concrete Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Re-Striping, Re-Marking, and Replace Pavement Marker Section Bid | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| TOTAL BID (sum of all sections) | \$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
+| Crack and Joint Sealing Section Bid | {{#optional crackAndJointSealingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Patching, Leveling, and Asphalt Seal Coating Section Bid | {{#optional patchingLevelingSealCoatTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Milling Section Bid | {{#optional millingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Reclamation Section Bid | {{#optional reclamationTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Resurfacing Section Bid | {{#optional resurfacingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Concrete Section Bid | {{#optional concreteTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| Re-Striping, Re-Marking, and Replace Pavement Marker Section Bid | {{#optional pavementMarkingTotal}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
+| TOTAL BID (sum of all sections) | {{#optional totalBid}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} |
 
-Total Bid written in words: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ Dollars.
+Total Bid written in words: {{#optional totalBidWritten}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} Dollars.
 
 *Note: The Total Bid is the sum of the section totals. No contingency line is included; project contingency, if any, is held by the Town in the project budget and is not bid or priced by the Bidder. In the event of a discrepancy between a unit price and an extended amount, the unit price shall govern; in the event of a discrepancy between the sum of the section totals and the Total Bid, the sum of the section totals shall govern.*
 

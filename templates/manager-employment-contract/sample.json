@@ -14,8 +14,6 @@
   "pronounObject": "him",
   "pronounPossessive": "his",
 
-  "executionDay": "____",
-  "executionMonth": "________________",
   "executionYear": "2026",
   "effectiveDate": "2025-07-01T00:00:00.000Z",
 
@@ -54,8 +52,6 @@
   "automobileStipend": "$350.00",
   "financeOfficerTitle": "Finance Director",
 
-  "presidingOfficerName": "________________________",
   "presidingOfficerTitle": "Mayor",
-  "clerkName": "________________________",
   "clerkTitle": "Town Clerk"
 }

@@ -42,10 +42,12 @@ import com.trustblocks.municipal.agreement@1.0.0.MunicipalAgreement
  * words are a paired ...Written property, as in the manager employment
  * template, rather than derived.
  *
- * Extended amounts and section totals on the Bid Form are left as the
- * blanks they are in the source: they are arithmetic over quantity and
- * unit price, and the Bid Form itself says the unit price governs where
- * the two disagree.
+ * Every blank in the package is a place for data, so every blank is a
+ * property -- including the extended amounts, section totals and Total Bid
+ * a bidder writes on the Bid Form, and the signature page. Those amounts
+ * are the bidder's figures, not computed ones: the Bid Form says which
+ * figure governs when they disagree, so a disagreement is a fact to find,
+ * not one to make impossible.
  */
 @template
 asset StreetResurfacingContract extends MunicipalAgreement {
@@ -93,7 +95,40 @@ asset StreetResurfacingContract extends MunicipalAgreement {
   o Double asphaltBinderBaseIndexPerTon optional
   o DateTime asphaltBinderBaseIndexDate optional
 
+  // ---- Execution (the signature page and pre-audit certificate) ------------------
+  // Each "By:" line holds a signature -- for an electronically executed
+  // contract, a reference to the signing credential. The signature-block
+  // clause is to take these over with verified DID signatures.
+  o String managerSignature optional
+  o DateTime managerSignedDate optional
+  o String clerkAttestation optional
+  o String townAttorneyApproval optional
+  o String contractorSignature optional
+  o String contractorSignatoryName optional
+  o String contractorSignatoryTitle optional
+  o DateTime contractorSignedDate optional
+  o String contractorAttestation optional
+  o String contractorAttestName optional
+  o String contractorAttestTitle optional
+  @description("The Finance Officer's pre-audit certificate under N.C. Gen. Stat. § 159-28")
+  o String financeOfficerSignature optional
+  o DateTime preAuditDate optional
+
   // ---- Bid Form ---------------------------------------------------------------------
+  // Section totals, the Total Bid and its words are what the bidder wrote.
+  // They are data, not computed here: the Bid Sheet itself says a unit
+  // price governs a disagreeing extended amount, and the sum of the section
+  // totals governs a disagreeing Total Bid -- so disagreement is possible,
+  // and is for logic to find, not for the model to prevent.
+  o Double crackAndJointSealingTotal optional
+  o Double patchingLevelingSealCoatTotal optional
+  o Double millingTotal optional
+  o Double reclamationTotal optional
+  o Double resurfacingTotal optional
+  o Double concreteTotal optional
+  o Double pavementMarkingTotal optional
+  o Double totalBid optional
+  o String totalBidWritten optional
   o Addendum[] addenda
   o BidItem[] crackAndJointSealingItems
   o BidItem[] patchingLevelingSealCoatItems
@@ -126,6 +161,8 @@ concept BidItem {
   o String unit
   o Double estimatedQuantity optional
   o Double unitPrice optional
+  @description("The bidder's extended amount; the unit price governs where they disagree")
+  o Double amount optional
 }
 
 /**

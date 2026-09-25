@@ -6,7 +6,7 @@
 
 **EMPLOYMENT CONTRACT**
 
-THIS AGREEMENT is made and entered into this {{executionDay}} day of {{executionMonth}}, {{executionYear}}, to be effective as of {{effectiveDate}}, by and between the {{municipalityType}} OF {{municipalityName}}, STATE OF {{stateName}}, a municipal corporation existing pursuant to the laws of the State of {{stateName}}, hereinafter called the "{{municipalityType}}" or "Employer" as party of the first part, and {{employeeName}}, hereinafter called "Employee" as party of the second part, both of whom understand as follows:
+THIS AGREEMENT is made and entered into this {{#optional executionDay}}{{this}}{{else}}\_\_\_\_{{/optional}} day of {{#optional executionMonth}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}, {{executionYear}}, to be effective as of {{effectiveDate}}, by and between the {{municipalityType}} OF {{municipalityName}}, STATE OF {{stateName}}, a municipal corporation existing pursuant to the laws of the State of {{stateName}}, hereinafter called the "{{municipalityType}}" or "Employer" as party of the first part, and {{employeeName}}, hereinafter called "Employee" as party of the second part, both of whom understand as follows:
 
 **WITNESSETH**
 
@@ -154,15 +154,15 @@ IN WITNESS WHEREOF, the {{municipalityType}} of {{municipalityName}} has caused 
 
 **{{municipalityType}} OF {{municipalityName}}**
 
-_______________________________________
-{{presidingOfficerName}}, {{presidingOfficerTitle}}
+{{#optional presidingOfficerSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
+{{#optional presidingOfficerName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}, {{presidingOfficerTitle}}
 
 **ATTEST:**
 
-_______________________________________
-{{clerkName}}, {{clerkTitle}}
+{{#optional clerkAttestation}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
+{{#optional clerkName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}, {{clerkTitle}}
 
 **EMPLOYEE**
 
-_______________________________________
+{{#optional employeeSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
 {{employeeName}}

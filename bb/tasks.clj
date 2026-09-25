@@ -57,6 +57,27 @@
          (keep #(second (re-find #"(?m)^namespace\s+(\S+)" (slurp (str %)))))
          distinct)))
 
+(defn- literal-blanks
+  "Blanks written into a grammar as text rather than held by a field: a run
+  of underscores or a bracketed [PLACEHOLDER] anywhere outside an
+  {{#optional}} block's {{else}} branch -- which is where a field's own
+  blank belongs, rendered when the field is absent."
+  [grammar]
+  (let [outside (str/replace grammar #"(?s)\{\{else\}\}.*?\{\{/optional\}\}" "{{/optional}}")]
+    (->> (re-seq #"(?:\\_){4,}|_{4,}|\\?\[[A-Z][A-Z ]{2,}\\?\]" outside)
+         distinct)))
+
+(defn- blank-values
+  "Paths in `data` whose value is a blank written as data -- a string of
+  nothing but underscores -- where the field should simply be absent."
+  ([data] (blank-values [] data))
+  ([path data]
+   (cond
+     (map? data) (mapcat (fn [[k v]] (blank-values (conj path k) v)) data)
+     (sequential? data) (mapcat (fn [i v] (blank-values (conj path i) v)) (range) data)
+     (and (string? data) (re-matches #"_+" data)) [path]
+     :else nil)))
+
 (defn- problems
   "Why template `dir` is not a valid template, as a seq of strings."
   [dir]
@@ -100,6 +121,14 @@
                       [(str logic " must be exactly one expression -- the clause -- not " n)])))
           (when-not (fs/exists? (f "request.json"))
             ["an executing template needs a request.json"]))))
+
+     ;; Every blank in a form is a place for data: a field, never text.
+     (when grammar
+       (when-let [blanks (seq (literal-blanks grammar))]
+         [(str "grammar: " (count blanks) " blank(s) written as text, not held by a field: "
+               (str/join ", " (take 3 blanks)))]))
+     (for [path (blank-values sample)]
+       (str "sample.json: " (str/join "." path) " is a blank written as data; leave the field out"))
 
      ;; The CommonMark TemplateMark rules.
      (when grammar

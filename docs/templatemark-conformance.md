@@ -148,6 +148,18 @@ CommonMark would read with the wrong meaning:
   They are `- ` bullet lists now.
 - **`<u>` underline tags** — raw HTML, and underline has no CommonMark form.
 
+Two more that read differently in CommonMark than in Word:
+
+- **A line of nothing but underscores is a horizontal rule.** An unescaped
+  `_______` signature line on its own line rendered as `---` in Accord's
+  own draft. Blanks are escaped (`\_\_\_`) -- and in any case belong in a
+  field's `{{else}}` branch (see `docs/model-conventions.md`).
+- **An inline block cannot span a paragraph break.** An `{{#optional}}`
+  whose `{{else}}` contained a blank line left a literal `{{/optional}}` in
+  the draft -- and Accord drafts that without complaint. Keep a block within
+  one paragraph; for a second line use a hard line break (a trailing `\`).
+  `bb conformance` fails any draft that still contains `{{`.
+
 Format strings are limited to the documented tokens too. `dddd` (weekday)
 happens to render through Accord's engine, but it is not a TemplateMark
 DateTime token, so the bid opening date uses `"MMMM D, YYYY"`.

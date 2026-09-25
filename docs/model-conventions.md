@@ -22,6 +22,21 @@ published models (`contract`, `runtime`, `usa.state`, ...) and, until they are
 published at stable URLs of their own, our shared models vendored from
 `shared/model/`. `bb check` enforces this.
 
+**Every blank is a field.** A municipal contract is itself a form: every
+blank in it -- a date, a name, a signature line, an amount the bidder
+writes -- is a place for data, so every blank is an optional property whose
+absence renders the original blank:
+
+```
+{{#optional contractorSignedDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_{{/optional}}
+```
+
+A blank is never left as text in a grammar, and never stored as data (a
+`"____"` value in `sample.json`): the field is simply absent. `bb check`
+enforces both. Figures a party writes that could be computed -- a Bid
+Form's extended amounts and totals -- are still that party's data, because
+the contract itself says which figure governs when they disagree.
+
 **No jurisdiction in the namespace.** The manager employment model was
 inherited as `us.nc.municipal.manageremployment@0.1.0`, which bakes North
 Carolina into the type name and forces a copy of every model per state.

@@ -22,7 +22,11 @@ Every blank in the package is an optional property whose absence renders
 the original blank, so `sample.json` is the package exactly as issued — no
 contractor, prices or streets — and drafting it reproduces the source (98.8%
 word for word; every difference is a table restated as a list or
-paragraphs). An award is the same instance with those properties filled in.
+paragraphs). An award is the same instance with those properties filled in -- down to
+the signature page (each signature, printed name, title and date, the Town
+Attorney's approval, the Finance Officer's pre-audit certificate) and the
+bidder's own figures on the Bid Form (each extended amount, the section
+totals, the Total Bid and its words).
 
 ## Logic
 

@@ -50,6 +50,13 @@
                           (.fromArchive Template (fs/readFileSync cta))
                           (.fromDirectory Template dir))
                  out    (.draft (TemplateArchiveProcessor. t) data "markdown" #js {})]
+           ;; A directive that reaches the output was not parsed as one --
+           ;; e.g. an inline block spanning a paragraph break. Accord drafts
+           ;; it without complaint, so check for it here.
+           _      (when (re-find #"\{\{" out)
+                    (throw (js/Error. (str "draft contains an unparsed directive: "
+                                           (subs out (max 0 (- (.indexOf out "{{") 40))
+                                                 (min (count out) (+ (.indexOf out "{{") 40)))))))
            (println (str "  ok    " (if cta (str "dist/" name) (.getIdentifier t))
                          "  (" (count out) " chars drafted)"))
            true)
