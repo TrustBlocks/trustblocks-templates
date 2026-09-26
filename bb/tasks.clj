@@ -70,6 +70,12 @@
          (remove #(str/starts-with? (str (fs/file-name %)) "@"))
          (remove #(shared (str (fs/file-name %)))))))
 
+(defn- shared-model-files
+  "A template's copies of our shared models (shared/model/)."
+  [ctos]
+  (let [shared (set (map (comp str fs/file-name) (fs/glob "shared/model" "*.cto")))]
+    (filter #(shared (str (fs/file-name %))) ctos)))
+
 (defn- own-namespaces
   "The namespaces a template declares itself, in its own model files."
   [ctos]
@@ -123,8 +129,9 @@
 
 (defn- lifecycle-problems
   "Why lifecycle `lc` is not a sound state machine for a template whose own
-  models declare `names`. See docs/model-conventions.md, Lifecycles."
-  [lc {:keys [types requests]}]
+  models declare `names`, and whose shared models declare the Requests
+  `shared-requests`. See docs/model-conventions.md, Lifecycles."
+  [lc {:keys [types requests]} shared-requests]
   (let [states      (map #(get % "name") (get lc "states"))
         state?      (set states)
         accepting   (set (map #(get % "name") (filter #(get % "accepting") (get lc "states"))))
@@ -144,8 +151,8 @@
       (fn [{:strs [event from to requires afterDays]}]
         (let [at (str "lifecycle: " event)]
           (concat
-           (when-not (requests event)
-             [(str at " is not a Request transaction in the template's namespace")])
+           (when-not (or (requests event) (shared-requests event))
+             [(str at " is not a Request transaction in the template's namespace or a shared model it carries")])
            (for [s (cons to from) :when (not (state? s))]
              (str at " names undeclared state " s))
            (for [{:strs [credential authority]} requires
@@ -210,13 +217,6 @@
          (concat
           (when-not (or logic lifecycle)
             ["package.json's trustblocks section names neither logic nor a lifecycle"])
-          ;; Who may attest to the contract is the contract's to say.
-          (when-let [attestation (get tb "attestation")]
-            (concat
-             (when-not (re-matches #"[A-Z][A-Z_]*" (str (get attestation "authority")))
-               ["trustblocks.attestation.authority must be an AUTHORITY name"])
-             (when-not logic
-               ["trustblocks.attestation needs logic: the clause answers the AttestationRequest"])))
           (when logic
             (concat
              (when-not (trustblocks-runtimes (get tb "runtime"))
@@ -236,8 +236,11 @@
               ["a template with a lifecycle carries model/lifecycle.cto, copied from shared/model/"]
               :else
               (lifecycle-problems (json/parse-string (slurp (f lifecycle)))
-                                  (declared-names (map #(slurp (str %))
-                                                       (own-model-files ctos)))))))))
+                                  (declared-names (map #(slurp (str %)) (own-model-files ctos)))
+                                  ;; An event may also be a Request from a shared
+                                  ;; model the template carries -- the standard
+                                  ;; AttestationRequest.
+                                  (:requests (declared-names (map #(slurp (str %)) (shared-model-files ctos))))))))))
 
      ;; Every blank in a form is a place for data: a field, never text.
      (when grammar

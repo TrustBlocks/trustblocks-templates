@@ -12,7 +12,7 @@ Accord Project's own tools load and draft, and that
 
 | Template | What it is | Logic |
 | --- | --- | --- |
-| [`manager-employment-contract`](templates/manager-employment-contract/) | The Town Manager's employment contract (2025–2029, restated): council approval, severance, service-credit purchase | Board approval; officeholder attestation |
+| [`manager-employment-contract`](templates/manager-employment-contract/) | The Town Manager's employment contract (2025–2029, restated): council approval, severance, service-credit purchase | Lifecycle: Board approval certified by the Town Clerk, then attestations. Clause: records the approval and effective date |
 
 ### Packages
 
@@ -67,13 +67,10 @@ The same section names a template's lifecycle, when it has one -- see
 "trustblocks": { "lifecycle": "lifecycle.json" }
 ```
 
-And the authority an officeholder needs to attest to the contract, when the
-contract accepts attestations (its clause answers the `AttestationRequest`):
-
-```json
-"trustblocks": { "runtime": "clojure", "logic": "logic/clause.clj",
-                 "attestation": { "authority": "CERTIFY_MINUTES" } }
-```
+A lifecycle's events are the template's own `Request` types, or the shared
+`AttestationRequest` for attestations to the contract -- the manager
+contract's lifecycle requires the Town Clerk's `CERTIFY_MINUTES` for both its
+Board approval and any attestation after it.
 
 `logic/clause.clj` is one expression — the clause — evaluated in Trustblocks'
 sandbox with four bindings: `data` (the contract), `request`, `state` (the
