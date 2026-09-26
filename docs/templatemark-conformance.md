@@ -216,6 +216,9 @@ stays a valid Accord template:
   from the clause template; a sync task rewrites them.
 - **A clause prints only its own fields.** If a signature block shows the
   Town's name, the name is a field of the clause, not of the contract.
+- **Clauses are a repository matter.** Trustblocks ingests only contract
+  templates, with their clauses already built in, and runs only contracts.
+  It never sees a clause on its own.
 - **A clause in a contract is a required property**, until the engine's crash
   on an absent optional clause is fixed. Blanks inside the clause are still
   optional fields, so an unsigned contract drafts with blank signature lines.
