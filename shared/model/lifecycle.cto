@@ -1,0 +1,68 @@
+namespace com.trustblocks.lifecycle@1.0.0
+
+import org.accordproject.runtime@0.2.0.Response from https://models.accordproject.org/accordproject/runtime@0.2.0.cto
+
+/**
+ * A document's lifecycle, declared as data: the states it moves through, the
+ * events that move it, and for each event the certification it requires --
+ * a state machine in the sense of Flood & Goodenough, "Contract as
+ * Automaton" (OFR Working Paper 15-04).
+ *
+ * It is part of the contract, not of any application: a template carries its
+ * lifecycle beside its model and text (package.json's trustblocks.lifecycle
+ * names the file), so whatever runs the template -- Trustblocks, a TypeScript
+ * runtime, a ledger -- enforces the same rules. What a runtime supplies is
+ * the environment: verifying that a certification is genuine, and held under
+ * the authority named, at the time of the event; and the time itself.
+ *
+ * Each event is a Request type in the template's own namespace, so it is
+ * also the trigger the template's clause, if it has one, is run with: the
+ * lifecycle says whether the event may happen, and the clause what follows
+ * from it.
+ */
+concept Lifecycle {
+  @description("The template's state type, by name in its own namespace; it has a String status")
+  o String stateType
+  o LifecycleState[] states
+  o Transition[] transitions
+}
+
+concept LifecycleState {
+  o String name
+  @description("A final state: the document's lifecycle is complete, and no event moves it on")
+  o Boolean accepting optional
+}
+
+/**
+ * One event, the states it may occur in, and the state it leads to.
+ */
+concept Transition {
+  @description("A Request type in the template's own namespace")
+  o String event
+  @description("The states the event may occur in; none when the event begins the document's lifecycle")
+  o String[] from
+  o String to
+  @description("Any one of these certifies the event; none for a timed event")
+  o Certification[] requires
+  @description("A timed event: it may occur only this many calendar days after the document entered its current state")
+  o Integer afterDays optional
+}
+
+/**
+ * A signed credential of `credential` type -- Receipt or Attestation -- by
+ * someone holding `authority` at the time of the event.
+ */
+concept Certification {
+  o String credential
+  o String authority
+}
+
+/**
+ * What a runtime answers an event with when the template has no clause: the
+ * transition taken.
+ */
+transaction TransitionResponse extends Response {
+  o String event
+  o String from optional
+  o String to
+}

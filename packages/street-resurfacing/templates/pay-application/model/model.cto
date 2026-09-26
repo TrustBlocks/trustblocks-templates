@@ -1,5 +1,7 @@
 namespace com.trustblocks.municipal.construction.payapplication@1.0.0
 
+import org.accordproject.runtime@0.2.0.Request from https://models.accordproject.org/accordproject/runtime@0.2.0.cto
+
 /**
  * A Contractor Pay Request -- one month's application for payment under a
  * unit-price construction contract.
@@ -115,4 +117,47 @@ concept PayItemLine {
   o Double amountToDate optional
   o Boolean completed
   o Boolean approvedByEngineer
+}
+
+// ---- Lifecycle ------------------------------------------------------------------
+// The events that move a pay request through its lifecycle, declared in
+// lifecycle.json, and its state. Each event is certified by a signed
+// Receipt or Attestation; lifecycle.json says which, under what authority.
+
+/**
+ * A pay request's place in its lifecycle -- one of the states lifecycle.json
+ * declares.
+ */
+concept ContractorPayRequestState identified by payRequestId {
+  o String payRequestId
+  o String status
+}
+
+/** The pay request is received from the Contractor (Sec. 6). */
+transaction PayRequestReceived extends Request {
+}
+
+/** The work it claims is inspected: the engineer's certificate is received, or an inspection certified. */
+transaction InspectionCertified extends Request {
+}
+
+/** The Director, or the Director's designated representative, verifies quantities and amounts (Sec. 6). */
+transaction PayRequestCertified extends Request {
+}
+
+/** Approved and payment recommended (Exhibit "E"). */
+transaction PaymentApproved extends Request {
+}
+
+/** The Finance Officer certifies payment was made. */
+transaction PaymentCertified extends Request {
+}
+
+/** Thirty days pass after approval without payment (Sec. 6). */
+transaction PaymentOverdue extends Request {
+}
+
+/** Returned to the Contractor for correction; a corrected request is a new document. */
+transaction PayRequestReturned extends Request {
+  o String reason
 }

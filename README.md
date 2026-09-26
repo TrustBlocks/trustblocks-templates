@@ -20,10 +20,10 @@ A package is a family of templates for the documents of one kind of matter:
 the contract, and the documents made under it, each its own template and its
 own archive. In Trustblocks a *matter* is one live instance of a package.
 
-| Package | Template | What it is | Logic |
+| Package | Template | What it is | Logic / lifecycle |
 | --- | --- | --- | --- |
 | [`street-resurfacing`](packages/street-resurfacing/) | [`contract`](packages/street-resurfacing/templates/contract/) | Contract No. STR-27, a formally bid unit-price street resurfacing contract: 37 pay items, statutory retainage, liquidated damages | Not yet |
-| | [`pay-application`](packages/street-resurfacing/templates/pay-application/) | Exhibit "E"'s Contractor Pay Request, with a schedule of pay items (Completed / Approved by Engineer) and a Finance Officer's payment certificate | Not yet |
+| | [`pay-application`](packages/street-resurfacing/templates/pay-application/) | Exhibit "E"'s Contractor Pay Request, with a schedule of pay items (Completed / Approved by Engineer) and a Finance Officer's payment certificate | Lifecycle: received → inspected → certified → approved → paid, each step certified |
 
 ## Layout
 
@@ -34,6 +34,7 @@ templates/<name>/          one Accord template directory each
   text/grammar.tem.md      TemplateMark (CommonMark + pipe tables)
   sample.json              a contract instance to draft from
   logic/clause.clj         the clause, for templates that execute
+  lifecycle.json           the document's states and certified events, for templates that have one
   request.json             a request the clause answers, for templates that execute
 packages/<package>/
   README.md                the package: its documents and how they relate
@@ -58,6 +59,13 @@ Clojure says so in a section of its own that Accord ignores:
 
 In Accord Project's tools such an archive drafts, validates, and shows its
 model; Trustblocks runs its logic.
+
+The same section names a template's lifecycle, when it has one -- see
+[`docs/model-conventions.md`](docs/model-conventions.md#lifecycles):
+
+```json
+"trustblocks": { "lifecycle": "lifecycle.json" }
+```
 
 `logic/clause.clj` is one expression — the clause — evaluated in Trustblocks'
 sandbox with four bindings: `data` (the contract), `request`, `state` (the

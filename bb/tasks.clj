@@ -60,17 +60,22 @@
         (let [form (read {:eof ::eof} r)]
           (if (= ::eof form) forms (recur (conj forms form))))))))
 
-(defn- own-namespaces
-  "The namespaces a template declares itself: every model/*.cto except the
-  vendored imports -- Accord's (@models.accordproject.org.*) and copies of
-  ours from shared/model/."
+(defn- own-model-files
+  "A template's own model files: every model/*.cto except the vendored
+  imports -- Accord's (@models.accordproject.org.*) and copies of ours from
+  shared/model/."
   [ctos]
   (let [shared (set (map (comp str fs/file-name) (fs/glob "shared/model" "*.cto")))]
     (->> ctos
          (remove #(str/starts-with? (str (fs/file-name %)) "@"))
-         (remove #(shared (str (fs/file-name %))))
-         (keep #(second (re-find #"(?m)^namespace\s+(\S+)" (slurp (str %)))))
-         distinct)))
+         (remove #(shared (str (fs/file-name %)))))))
+
+(defn- own-namespaces
+  "The namespaces a template declares itself, in its own model files."
+  [ctos]
+  (->> (own-model-files ctos)
+       (keep #(second (re-find #"(?m)^namespace\s+(\S+)" (slurp (str %)))))
+       distinct))
 
 (defn- literal-blanks
   "Blanks written into a grammar as text rather than held by a field: a run
@@ -92,6 +97,83 @@
      (sequential? data) (mapcat (fn [i v] (blank-values (conj path i) v)) (range) data)
      (and (string? data) (re-matches #"_+" data)) [path]
      :else nil)))
+
+(def ^:private credential-types
+  "What certifies a lifecycle event: a Receipt for a document received from
+  someone with no identity of their own, an Attestation for an
+  officeholder's own act."
+  #{"Receipt" "Attestation"})
+
+(defn- declared-names
+  "Every type an own-namespace model declares, and those of them that are
+  Request transactions -- the events a lifecycle may name."
+  [texts]
+  (let [text (str/join "\n" texts)]
+    {:types    (set (map second (re-seq #"(?m)^\s*(?:abstract\s+)?(?:concept|asset|transaction|participant|event)\s+(\w+)" text)))
+     :requests (set (map second (re-seq #"(?m)^\s*transaction\s+(\w+)\s+extends\s+Request\b" text)))}))
+
+(defn- reachable
+  "The states reachable from those a creating transition leads to."
+  [transitions]
+  (loop [seen (set (map #(get % "to") (filter #(empty? (get % "from")) transitions)))]
+    (let [more (into seen (for [t transitions
+                                :when (some seen (get t "from"))]
+                            (get t "to")))]
+      (if (= more seen) seen (recur more)))))
+
+(defn- lifecycle-problems
+  "Why lifecycle `lc` is not a sound state machine for a template whose own
+  models declare `names`. See docs/model-conventions.md, Lifecycles."
+  [lc {:keys [types requests]}]
+  (let [states      (map #(get % "name") (get lc "states"))
+        state?      (set states)
+        accepting   (set (map #(get % "name") (filter #(get % "accepting") (get lc "states"))))
+        transitions (get lc "transitions")
+        outgoing    (set (mapcat #(get % "from") transitions))
+        events      (set (map #(get % "event") transitions))]
+    (concat
+     (when (not= "com.trustblocks.lifecycle@1.0.0.Lifecycle" (get lc "$class"))
+       ["lifecycle: $class must be com.trustblocks.lifecycle@1.0.0.Lifecycle"])
+     (when-not (types (get lc "stateType"))
+       [(str "lifecycle: stateType " (get lc "stateType") " is not declared in the template's namespace")])
+     (for [[n c] (frequencies states) :when (> c 1)]
+       (str "lifecycle: state " n " declared " c " times"))
+     (when-not (some #(empty? (get % "from")) transitions)
+       ["lifecycle: no transition begins the lifecycle (one with no from states)"])
+     (mapcat
+      (fn [{:strs [event from to requires afterDays]}]
+        (let [at (str "lifecycle: " event)]
+          (concat
+           (when-not (requests event)
+             [(str at " is not a Request transaction in the template's namespace")])
+           (for [s (cons to from) :when (not (state? s))]
+             (str at " names undeclared state " s))
+           (for [{:strs [credential authority]} requires
+                 :when (not (and (credential-types credential)
+                                 (re-matches #"[A-Z][A-Z_]*" (str authority))))]
+             (str at " requires " credential "/" authority
+                  " -- a credential of " (sort credential-types) " and an AUTHORITY name"))
+           (cond
+             (and afterDays (seq requires))
+             [(str at " is timed; a timed event is certified by nobody")]
+             (and afterDays (empty? from))
+             [(str at " is timed, so it needs a state to count from")]
+             (and (nil? afterDays) (empty? requires))
+             [(str at " is neither certified nor timed")]))))
+      transitions)
+     ;; Deterministic: one transition per event per state.
+     (for [[event ts] (group-by #(get % "event") transitions)
+           :let [froms (mapcat #(if (empty? (get % "from")) [::begin] (get % "from")) ts)]
+           [s c] (frequencies froms) :when (> c 1)]
+       (str "lifecycle: " event " has " c " transitions from " (if (= ::begin s) "the beginning" s)))
+     (for [s states :when (not ((reachable transitions) s))]
+       (str "lifecycle: state " s " is unreachable"))
+     (for [s states :when (and (not (accepting s)) (not (outgoing s)))]
+       (str "lifecycle: state " s " is a dead end -- no event leaves it, and it is not accepting"))
+     (for [s states :when (and (accepting s) (outgoing s))]
+       (str "lifecycle: accepting state " s " has events leaving it"))
+     (for [r (sort requests) :when (not (events r))]
+       (str "lifecycle: Request " r " is declared but no transition uses it")))))
 
 (defn- problems
   "Why template `dir` is not a valid template, as a seq of strings."
@@ -122,20 +204,33 @@
      (when-not grammar ["no text/grammar.tem.md"])
      (when-not (get sample "$class") ["sample.json missing, or has no $class"])
 
-     ;; Trustblocks' own runtime, when the template executes.
+     ;; Trustblocks' own section: a clause, a lifecycle, or both.
      (when tb
-       (let [logic (get tb "logic")]
+       (let [{:strs [logic lifecycle]} tb]
          (concat
-          (when-not (trustblocks-runtimes (get tb "runtime"))
-            [(str "trustblocks.runtime must be one of " (sort trustblocks-runtimes))])
-          (cond
-            (str/blank? logic) ["trustblocks.logic names no file"]
-            (not (fs/exists? (f logic))) [(str "trustblocks.logic " logic " does not exist")]
-            :else (let [n (count (read-forms (f logic)))]
-                    (when (not= 1 n)
-                      [(str logic " must be exactly one expression -- the clause -- not " n)])))
-          (when-not (fs/exists? (f "request.json"))
-            ["an executing template needs a request.json"]))))
+          (when-not (or logic lifecycle)
+            ["package.json's trustblocks section names neither logic nor a lifecycle"])
+          (when logic
+            (concat
+             (when-not (trustblocks-runtimes (get tb "runtime"))
+               [(str "trustblocks.runtime must be one of " (sort trustblocks-runtimes))])
+             (if-not (fs/exists? (f logic))
+               [(str "trustblocks.logic " logic " does not exist")]
+               (let [n (count (read-forms (f logic)))]
+                 (when (not= 1 n)
+                   [(str logic " must be exactly one expression -- the clause -- not " n)])))
+             (when-not (fs/exists? (f "request.json"))
+               ["an executing template needs a request.json"])))
+          (when lifecycle
+            (cond
+              (not (fs/exists? (f lifecycle)))
+              [(str "trustblocks.lifecycle " lifecycle " does not exist")]
+              (not (fs/exists? (f "model/lifecycle.cto")))
+              ["a template with a lifecycle carries model/lifecycle.cto, copied from shared/model/"]
+              :else
+              (lifecycle-problems (json/parse-string (slurp (f lifecycle)))
+                                  (declared-names (map #(slurp (str %))
+                                                       (own-model-files ctos)))))))))
 
      ;; Every blank in a form is a place for data: a field, never text.
      (when grammar

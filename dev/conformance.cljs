@@ -51,6 +51,12 @@
                           (.fromArchive Template (fs/readFileSync cta))
                           (.fromDirectory Template dir))
                  out    (.draft (TemplateArchiveProcessor. t) data "markdown" #js {})
+                 ;; A lifecycle is data the template carries, typed by the
+                 ;; vendored lifecycle.cto: Concerto itself must accept it.
+                 pkg    (-> (fs/readFileSync (path/join dir "package.json") "utf8") js/JSON.parse)
+                 _      (when-let [lc (some-> pkg .-trustblocks .-lifecycle)]
+                          (.fromJSON (.getSerializer t)
+                                     (js/JSON.parse (fs/readFileSync (path/join dir lc) "utf8"))))
                  ;; A directive that reaches the output was not parsed as
                  ;; one -- e.g. an inline block spanning a paragraph break.
                  ;; Accord drafts it without complaint, so check for it here.
