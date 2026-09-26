@@ -2,7 +2,7 @@
 
 The Town of China Grove's Street Resurfacing contract, Contract No. STR-27,
 formally bid under N.C. Gen. Stat. § 143-129. Converted from the bid package
-in [`sources/`](../../sources/China_Grove_Street_Resurfacing_Bid_Package.docx).
+in [`sources/`](../../../../sources/China_Grove_Street_Resurfacing_Bid_Package.docx).
 
 Root model: `com.trustblocks.municipal.construction@1.0.0.StreetResurfacingContract`,
 which extends the shared `MunicipalAgreement`, with `BidItem` (37 pay items

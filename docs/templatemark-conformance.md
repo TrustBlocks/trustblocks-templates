@@ -19,7 +19,8 @@ Accord conformance: 2 template(s) under templates
   ok    street-resurfacing-contract@0.1.0  (124382 chars drafted)
 ```
 
-Every template under `templates/` (any directory with a `package.json`) must
+Every template under `templates/` or a package's `packages/<package>/templates/`
+(any directory with a `package.json`) must
 load through cicero-core and draft through template-engine from its own
 `sample.json`. Non-zero exit on failure.
 

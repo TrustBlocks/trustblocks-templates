@@ -13,7 +13,17 @@ Accord Project's own tools load and draft, and that
 | Template | What it is | Logic |
 | --- | --- | --- |
 | [`manager-employment-contract`](templates/manager-employment-contract/) | The Town Manager's employment contract (2025–2029, restated): council approval, severance, service-credit purchase | Board approval; officeholder attestation |
-| [`street-resurfacing-contract`](templates/street-resurfacing-contract/) | Contract No. STR-27, a formally bid unit-price street resurfacing contract: 37 pay items, statutory retainage, liquidated damages | Not yet — pay requests are next |
+
+### Packages
+
+A package is a family of templates for the documents of one kind of matter:
+the contract, and the documents made under it, each its own template and its
+own archive. In Trustblocks a *matter* is one live instance of a package.
+
+| Package | Template | What it is | Logic |
+| --- | --- | --- | --- |
+| [`street-resurfacing`](packages/street-resurfacing/) | [`contract`](packages/street-resurfacing/templates/contract/) | Contract No. STR-27, a formally bid unit-price street resurfacing contract: 37 pay items, statutory retainage, liquidated damages | Not yet |
+| | [`pay-application`](packages/street-resurfacing/templates/pay-application/) | Exhibit "E"'s Contractor Pay Request, with a schedule of pay items (Completed / Approved by Engineer) and a Finance Officer's payment certificate | Not yet |
 
 ## Layout
 
@@ -25,6 +35,9 @@ templates/<name>/          one Accord template directory each
   sample.json              a contract instance to draft from
   logic/clause.clj         the clause, for templates that execute
   request.json             a request the clause answers, for templates that execute
+packages/<package>/
+  README.md                the package: its documents and how they relate
+  templates/<name>/        one Accord template directory per document type, laid out as above
 shared/model/              canonical copies of models more than one template carries
 sources/                   the source documents templates were derived from
 docs/                      model conventions; what Accord's engine actually requires
@@ -67,12 +80,15 @@ bb conformance    # every template, and every built archive, drafts through Acco
 
 ## Using the templates from Clojure
 
-`deps.edn` puts every template directory on the classpath under its own name:
+`deps.edn` puts `templates/` and `packages/` on the classpath, so a
+template is a resource under its own name, and a package's under
+`<package>/templates/<name>`:
 
 ```clojure
 io.github.TrustBlocks/trustblocks-templates {:git/sha "..."}
 
 (clojure.java.io/resource "manager-employment-contract/package.json")
+(clojure.java.io/resource "street-resurfacing/templates/pay-application/package.json")
 ```
 
 See [`docs/model-conventions.md`](docs/model-conventions.md) for namespaces

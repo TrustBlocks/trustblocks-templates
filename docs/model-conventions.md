@@ -13,6 +13,7 @@ Reverse domain, from `trustblocks.com`:
 | `com.trustblocks.attestation@1.0.0` | `AttestationRequest` / `AttestationResponse`, the standard pair a contract's clause adopts to support officeholder attestation |
 | `com.trustblocks.municipal.employment@1.0.0` | `ManagerEmployment`, the manager employment contract's root model, and its Board-approval Request/Response/State |
 | `com.trustblocks.municipal.construction@1.0.0` | `StreetResurfacingContract`, a unit-price public works construction contract, with `BidItem`, `StreetSegment` and `Addendum` |
+| `com.trustblocks.municipal.construction.payapplication@1.0.0` | `ContractorPayRequest`, a monthly pay request under a unit-price construction contract, with `PayItemLine` |
 
 **One namespace of its own per template.** As in Accord's own template
 library -- where 35 of 37 active templates declare exactly one -- a template's
@@ -69,7 +70,8 @@ anything the text never names.
 
 ## Where the files live
 
-In this repository. Each template under `templates/` is a complete Accord
+In this repository. Each template -- under `templates/`, or under a
+package's `packages/<package>/templates/` -- is a complete Accord
 template directory -- `package.json`, `model/`, `text/grammar.tem.md`,
 `sample.json`, and for templates that execute, `logic/` and `request.json` --
 and `bb build` zips each one into `dist/<name>@<version>.cta`.
@@ -97,3 +99,13 @@ Trustblocks needs to import them; this repository is what they would serve.
 - `bb conformance` -- every template must load and draft through Accord's own
   toolchain. Needs `npm install` once. Run it after any model or grammar
   change.
+
+## Packages
+
+A package groups the templates for the documents of one kind of matter --
+`street-resurfacing` is the contract and the pay application made under it.
+Each is still its own template, archive and namespace: Accord allows exactly
+one `@template` concept per archive, so two documents cannot share a root
+namespace. Types the documents genuinely share (the matter's contract-to-date
+position, when pay requests execute) go in the package's own `model/`,
+vendored into each template like `shared/model/`.
