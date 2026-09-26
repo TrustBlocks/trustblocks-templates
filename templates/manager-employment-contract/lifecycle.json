@@ -1,0 +1,17 @@
+{
+  "$class": "com.trustblocks.lifecycle@1.0.0.Lifecycle",
+  "stateType": "ManagerEmploymentState",
+  "states": [
+    {"$class": "com.trustblocks.lifecycle@1.0.0.LifecycleState", "name": "APPROVED"}
+  ],
+  "transitions": [
+    {"$class": "com.trustblocks.lifecycle@1.0.0.Transition",
+     "event": "BoardApprovalRequest", "from": [], "to": "APPROVED",
+     "requires": [{"$class": "com.trustblocks.lifecycle@1.0.0.Certification",
+                   "credential": "Attestation", "authority": "CERTIFY_MINUTES"}]},
+    {"$class": "com.trustblocks.lifecycle@1.0.0.Transition",
+     "event": "AttestationRequest", "from": ["APPROVED"], "to": "APPROVED",
+     "requires": [{"$class": "com.trustblocks.lifecycle@1.0.0.Certification",
+                   "credential": "Attestation", "authority": "CERTIFY_MINUTES"}]}
+  ]
+}

@@ -131,8 +131,9 @@ template with its own lifecycle, not a change to any application.
 `bb check` holds a lifecycle to being a sound state machine -- after Flood &
 Goodenough, "Contract as Automaton":
 
-- every event is a `Request` declared in the template's namespace, and every
-  such `Request` is some transition's event;
+- every event is a `Request` declared in the template's namespace or in a
+  shared model it carries (the standard `AttestationRequest`), and every
+  `Request` its own namespace declares is some transition's event;
 - at least one transition begins the lifecycle, and every state is reachable
   from one;
 - no dead ends: every state that is not accepting has an event leaving it, and

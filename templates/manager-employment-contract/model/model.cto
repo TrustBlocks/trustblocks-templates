@@ -156,7 +156,8 @@ concept ManagerEmploymentState identified by contractId {
 // empty markers; the value is that a runtime can recognise these as a
 // trigger pair rather than as two unrelated transactions.
 /**
- * The Town Council approves the contract, on councilActionDate.
+ * The Town Council approves the contract, on councilActionDate -- certified
+ * by the Town Clerk, who records the Council's vote.
  */
 transaction BoardApprovalRequest extends Request {
   o DateTime requestedAt
