@@ -131,14 +131,21 @@ concept PayItemLine {
 concept ContractorPayRequestState identified by payRequestId {
   o String payRequestId
   o String status
+  @description("The pay items the engineer has approved, from each InspectionCertified")
+  o String[] approvedPayItems optional
 }
 
 /** The pay request is received from the Contractor (Sec. 6). */
 transaction PayRequestReceived extends Request {
 }
 
-/** The work it claims is inspected: the engineer's certificate is received, or an inspection certified. */
+/**
+ * The work it claims is inspected: the engineer's certificate is received,
+ * or an inspection certified. Names the pay items approved -- the
+ * "Approved by Engineer" boxes.
+ */
 transaction InspectionCertified extends Request {
+  o String[] approvedPayItems
 }
 
 /** The Director, or the Director's designated representative, verifies quantities and amounts (Sec. 6). */

@@ -1,0 +1,4 @@
+{
+    "$class": "com.trustblocks.municipal.construction.payapplication@1.0.0.InspectionCertified",
+    "approvedPayItems": ["5.1"]
+}

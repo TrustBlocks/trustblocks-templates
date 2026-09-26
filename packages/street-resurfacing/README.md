@@ -11,7 +11,7 @@ Contract No. STR-27, in
 | Template | Namespace | Document |
 | --- | --- | --- |
 | [`contract`](templates/contract/) | `com.trustblocks.municipal.construction@1.0.0` | The contract as executed: the matter's terms |
-| [`pay-application`](templates/pay-application/) | `com.trustblocks.municipal.construction.payapplication@1.0.0` | Exhibit "E"'s Contractor Pay Request, one per month |
+| [`pay-application`](templates/pay-application/) | `com.trustblocks.municipal.construction.payapplication@1.0.0` | Exhibit "E"'s Contractor Pay Request, one per month, with its lifecycle and clause |
 
 ## How the documents relate
 
@@ -50,10 +50,31 @@ template:
 
 A returned request is finished; the corrected one is a new document.
 
+## The pay application's clause
+
+[`logic/clause.clj`](templates/pay-application/logic/clause.clj) decides what
+follows from each event the lifecycle allows:
+
+- `InspectionCertified` names the pay items the engineer approved, and the
+  clause records them in the pay request's state: the **Approved by Engineer**
+  boxes.
+- `PayRequestCertified`, the Director's verification of quantities and
+  amounts (Sec. 6), is refused unless every item with a quantity this period
+  has been approved, and the Contractor's figures agree to the cent. Each
+  amount must equal its quantity times the unit price. The gross must equal
+  the sum of the amounts to date. Retainage, liquidated damages, total
+  deductions and net due must follow from those figures.
+
+A refused certification leaves the request where it was; the Director returns
+it, and the corrected request is a new document.
+
 ## Not yet
 
-- The pay application's clause: what each event computes (quantities to date,
-  retainage under N.C. Gen. Stat. § 143-134.1, liquidated damages, net due)
-  and checks (no item certified without engineer approval).
-- `model/`: the types these documents will share -- the matter's
-  contract-to-date position. Nothing is shared yet.
+- The matter's contract-to-date position: quantities paid to date against the
+  contract's, retainage under N.C. Gen. Stat. § 143-134.1 (none on contracts
+  under $100,000, none after 50% complete with the surety's consent), and
+  liquidated damages from the Completion Date. These need the contract's
+  terms and every earlier pay request, so they belong to the matter, not to
+  one pay request.
+- `model/`: the types these documents will share for that. Nothing is shared
+  yet.

@@ -23,7 +23,7 @@ own archive. In Trustblocks a *matter* is one live instance of a package.
 | Package | Template | What it is | Logic / lifecycle |
 | --- | --- | --- | --- |
 | [`street-resurfacing`](packages/street-resurfacing/) | [`contract`](packages/street-resurfacing/templates/contract/) | Contract No. STR-27, a formally bid unit-price street resurfacing contract: 37 pay items, statutory retainage, liquidated damages | Not yet |
-| | [`pay-application`](packages/street-resurfacing/templates/pay-application/) | Exhibit "E"'s Contractor Pay Request, with a schedule of pay items (Completed / Approved by Engineer) and a Finance Officer's payment certificate | Lifecycle: received → inspected → certified → approved → paid, each step certified |
+| | [`pay-application`](packages/street-resurfacing/templates/pay-application/) | Exhibit "E"'s Contractor Pay Request, with a schedule of pay items (Completed / Approved by Engineer) and a Finance Officer's payment certificate | Lifecycle: received → inspected → certified → approved → paid, each step certified. Clause: records the engineer's approvals; refuses certification of unapproved work or figures that do not agree |
 
 ## Layout
 
