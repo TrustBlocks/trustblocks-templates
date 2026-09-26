@@ -167,3 +167,58 @@ DateTime token, so the bid opening date uses `"MMMM D, YYYY"`.
 
 `bb check` checks every template's grammar for these, so the next conversion
 fails a check rather than a reader.
+
+## Clauses: `{{#clause}}`, and what it does not do
+
+Probed against template-engine 5.1 / cicero-core 2.2 with a throwaway
+template, and read against Accord's own library (58 templates: 34 are clause
+templates, 2 contracts use `{{#clause}}`). Municipal contracts reuse clauses
+heavily -- signature blocks, indemnity, insurance, E-Verify, non-appropriation
+-- so what Accord supports decides how we build that reuse.
+
+**A clause template stands alone.** `"template": "clause"` in `package.json`,
+a root `@template asset X extends Clause`, its own grammar and sample: it loads
+and drafts like a contract (Accord's `contact-information` does).
+
+**In a contract, `{{#clause x}}…{{/clause}}` embeds a clause as data**, not as
+text from elsewhere:
+
+| Grammar in a contract | Result |
+| --- | --- |
+| `{{#clause sig}}Signed.{{/clause}}` where `sig` is a `Clause` subtype | drafts |
+| the clause's own fields inside: `{{signedDate as "MMMM D, YYYY"}}`, `{{clauseId}}` | drafts |
+| `{{#optional}}` inside the clause | drafts |
+| `{{#with}}` inside the clause | drafts, but breaks the paragraph, as everywhere |
+| a **contract** field inside the clause (`{{townName}}`) | `Unknown property` -- scope is the clause's own |
+| an **optional** clause property, present | drafts |
+| an **optional** clause property, **absent** | **crashes**: `Model violation in the "org.accordproject.commonmark@0.5.0.Text" instance. The field "nodes" has a value of "undefined"` -- with or without a `condition=` |
+| the clause's type imported from another namespace | drafts -- **unless** that type carries `@template`: `Found multiple concepts with @template decorator` |
+
+**There is no reuse of clause text.** The clause's text is written inline in
+the contract's grammar. Accord's own `copyright-license` declares
+`PaymentClause` in the contract's own namespace and writes the payment text
+between the markers. Nothing pulls a published clause template's grammar into
+a contract, and `clauseLibrary` in the engine is for formula code, not text.
+A standard clause used in forty contracts is forty copies.
+
+### What that means for us
+
+To reuse a clause across municipal contracts while every template directory
+stays a valid Accord template:
+
+- **A clause is its own template** under `clauses/<name>/`: `"template":
+  "clause"`, one namespace, the text, the model and optional logic. It is
+  drafted and checked on its own, like any template.
+- **A contract that uses it vendors both halves**, as it vendors
+  `shared/model/`. The model is copied **with `@template` removed**, so the
+  contract keeps a single `@template`. The text is copied verbatim between
+  `{{#clause x}}` and `{{/clause}}`. `bb check` fails when either copy drifts
+  from the clause template; a sync task rewrites them.
+- **A clause prints only its own fields.** If a signature block shows the
+  Town's name, the name is a field of the clause, not of the contract.
+- **Clauses are a repository matter.** Trustblocks ingests only contract
+  templates, with their clauses already built in, and runs only contracts.
+  It never sees a clause on its own.
+- **A clause in a contract is a required property**, until the engine's crash
+  on an absent optional clause is fixed. Blanks inside the clause are still
+  optional fields, so an unsigned contract drafts with blank signature lines.
