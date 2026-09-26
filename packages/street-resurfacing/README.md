@@ -33,10 +33,27 @@ General Conditions:
 4. The Finance Officer certifies that payment was made. Trustblocks makes no
    payments.
 
+## The pay application's lifecycle
+
+[`lifecycle.json`](templates/pay-application/lifecycle.json), part of the
+template:
+
+| From | Event | To | Certified by |
+|---|---|---|---|
+| — | `PayRequestReceived` | RECEIVED | Receipt, `RECEIVE_PAY_APPLICATIONS` |
+| RECEIVED | `InspectionCertified` | INSPECTED | Attestation, `CERTIFY_INSPECTIONS`; or Receipt, `RECEIVE_INSPECTION_REPORTS` |
+| INSPECTED | `PayRequestCertified` | CERTIFIED | Attestation, `CERTIFY_PAY_APPLICATIONS` |
+| CERTIFIED | `PaymentApproved` | APPROVED | Attestation, `APPROVE_PAYMENTS` |
+| APPROVED | `PaymentOverdue` | OVERDUE | 30 days pass (Sec. 6) |
+| APPROVED, OVERDUE | `PaymentCertified` | PAID (final) | Attestation, `CERTIFY_PAYMENTS` |
+| RECEIVED, INSPECTED, CERTIFIED | `PayRequestReturned` | RETURNED (final) | Attestation, `CERTIFY_PAY_APPLICATIONS` |
+
+A returned request is finished; the corrected one is a new document.
+
 ## Not yet
 
-- Logic: the matter's contract-to-date position (quantity paid to date per
-  pay item, retainage under N.C. Gen. Stat. § 143-134.1, liquidated damages),
-  and the lifecycle each document moves through, as data.
-- `model/`: the types these documents will share once pay requests execute.
-  Nothing is shared yet -- each template's model is its own.
+- The pay application's clause: what each event computes (quantities to date,
+  retainage under N.C. Gen. Stat. § 143-134.1, liquidated damages, net due)
+  and checks (no item certified without engineer approval).
+- `model/`: the types these documents will share -- the matter's
+  contract-to-date position. Nothing is shared yet.

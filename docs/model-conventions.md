@@ -10,10 +10,11 @@ Reverse domain, from `trustblocks.com`:
 | Namespace | Holds |
 | --- | --- |
 | `com.trustblocks.municipal.agreement@1.0.0` | `MunicipalAgreement`, the abstract base every agreement extends |
+| `com.trustblocks.lifecycle@1.0.0` | `Lifecycle`, a document's states and events, declared as data; `TransitionResponse` |
 | `com.trustblocks.attestation@1.0.0` | `AttestationRequest` / `AttestationResponse`, the standard pair a contract's clause adopts to support officeholder attestation |
 | `com.trustblocks.municipal.employment@1.0.0` | `ManagerEmployment`, the manager employment contract's root model, and its Board-approval Request/Response/State |
 | `com.trustblocks.municipal.construction@1.0.0` | `StreetResurfacingContract`, a unit-price public works construction contract, with `BidItem`, `StreetSegment` and `Addendum` |
-| `com.trustblocks.municipal.construction.payapplication@1.0.0` | `ContractorPayRequest`, a monthly pay request under a unit-price construction contract, with `PayItemLine` |
+| `com.trustblocks.municipal.construction.payapplication@1.0.0` | `ContractorPayRequest`, a monthly pay request under a unit-price construction contract, with `PayItemLine`, its lifecycle's events and `ContractorPayRequestState` |
 
 **One namespace of its own per template.** As in Accord's own template
 library -- where 35 of 37 active templates declare exactly one -- a template's
@@ -109,3 +110,35 @@ one `@template` concept per archive, so two documents cannot share a root
 namespace. Types the documents genuinely share (the matter's contract-to-date
 position, when pay requests execute) go in the package's own `model/`,
 vendored into each template like `shared/model/`.
+
+## Lifecycles
+
+A document's lifecycle is part of the contract, so it lives in the template:
+a JSON file named by `package.json`'s `trustblocks.lifecycle`, typed by
+`com.trustblocks.lifecycle@1.0.0.Lifecycle` (`shared/model/lifecycle.cto`,
+vendored into the template's `model/`). It declares the states, and for each
+event -- a `Request` transaction in the template's own namespace -- the states
+it may occur in, the state it leads to, and the certification it requires: a
+`Receipt` or `Attestation` by someone holding a named authority. A timed event
+(`afterDays`) is certified by nobody; time makes it happen.
+
+A runtime supplies what the contract cannot: it verifies that the
+certification is genuine and was held under that authority at the time of the
+event, and supplies the time. Everything else -- which events, in which
+order, certified by whom -- is the template's. A new document type is a new
+template with its own lifecycle, not a change to any application.
+
+`bb check` holds a lifecycle to being a sound state machine -- after Flood &
+Goodenough, "Contract as Automaton":
+
+- every event is a `Request` declared in the template's namespace, and every
+  such `Request` is some transition's event;
+- at least one transition begins the lifecycle, and every state is reachable
+  from one;
+- no dead ends: every state that is not accepting has an event leaving it, and
+  no event leaves an accepting state;
+- deterministic: one transition per event per state;
+- every transition is certified or timed, never neither, and never both;
+- certifications name a `Receipt` or `Attestation` and an authority.
+
+`bb conformance` checks the file against the model with Concerto itself.
