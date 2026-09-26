@@ -1,0 +1,6 @@
+{
+  "$class": "com.trustblocks.municipal.construction.payapplication@1.0.0.ContractorPayRequest",
+  "payRequestId": "china-grove-str-27-pay-request",
+  "contractNumber": "STR-27",
+  "payItems": []
+}

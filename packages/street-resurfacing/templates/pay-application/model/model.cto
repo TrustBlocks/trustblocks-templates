@@ -1,0 +1,118 @@
+namespace com.trustblocks.municipal.construction.payapplication@1.0.0
+
+/**
+ * A Contractor Pay Request -- one month's application for payment under a
+ * unit-price construction contract.
+ *
+ * Derived from the Contractor Pay Request in Exhibit "E" (Finance Forms) of
+ * the Town of China Grove's Street Resurfacing bid package, Contract
+ * No. STR-27, in this repository's
+ * sources/China_Grove_Street_Resurfacing_Bid_Package.docx: the project
+ * block, the Certificate of the Contractor, the payment computation, the
+ * Contractor's signature and the Town's approval lines. Exhibit "E"'s other
+ * forms (the vendor form and the Sales and Use Tax Report) are separate
+ * documents.
+ *
+ * Two additions, marked as such in the text, for the Town Attorney's
+ * review:
+ *
+ * - A schedule of pay items. Exhibit "E" has no line items, but Sec. 6 has
+ *   the Director verify quantities and General Conditions 16-17 pay only for
+ *   work "completed and accepted"; each line records the quantity this
+ *   period and to date, and whether the item is completed and approved by
+ *   the engineer.
+ * - A payment certificate for the Finance Officer. Trustblocks makes no
+ *   payments; the Finance Officer certifies one was made.
+ *
+ * One document of a street-resurfacing matter. It is filled from the
+ * contract's terms (contractor, dates, pay items and unit prices, as of the
+ * application's date) and its own period's quantities; this template
+ * renders the whole form, so its instance carries both.
+ *
+ * Every blank is a field, as in the contract: sample.json is the form as
+ * issued, and drafting it reproduces the blank form. The figures are the
+ * Contractor's and the Town's as written, not computed here -- whether they
+ * agree with the quantities and unit prices is for the matter's logic to
+ * check.
+ */
+@template
+asset ContractorPayRequest identified by payRequestId {
+  o String payRequestId
+
+  // ---- Project -------------------------------------------------------------
+  @description("The Town's contract number, e.g. STR-27")
+  o String contractNumber
+  o DateTime noticeToProceedDate optional
+  o DateTime completionDate optional
+  o Integer daysRemaining optional
+  o Double percentWorkComplete optional
+  o Double percentTimeComplete optional
+  o Double percentPaymentComplete optional
+  o Integer applicationNumber optional
+  o Integer sheetNumber optional
+  o Integer sheetCount optional
+  o DateTime periodFrom optional
+  o DateTime periodTo optional
+
+  // ---- Schedule of pay items (added) ----------------------------------------
+  o PayItemLine[] payItems
+
+  // ---- Payment computation ---------------------------------------------------
+  o Double grossAmount optional
+  o Double retainagePercent optional
+  o Double retainageAmount optional
+  o Double previousPayments optional
+  o Integer liquidatedDamagesDays optional
+  o Double liquidatedDamagesPerDay optional
+  o Double liquidatedDamagesAmount optional
+  o Double otherDeductions optional
+  o Double totalDeductions optional
+  o Double netAmountDue optional
+
+  // ---- Certificate of the Contractor -------------------------------------------
+  o String contractorName optional
+  o String contractorAddress optional
+  o String contractorSignature optional
+  o String contractorSignatoryTitle optional
+  o DateTime contractorSignedDate optional
+
+  // ---- Approved and payment recommended ------------------------------------------
+  // Each signature line holds a signature -- for an electronically executed
+  // document, a reference to the signing credential.
+  o String publicWorksDirectorSignature optional
+  o DateTime publicWorksDirectorSignedDate optional
+  o String managerSignature optional
+  o DateTime managerSignedDate optional
+
+  // ---- Payment certificate (added) --------------------------------------------------
+  o Double amountPaid optional
+  o DateTime paidDate optional
+  @description("Check or electronic funds transfer number")
+  o String paymentReference optional
+  o String financeOfficerSignature optional
+  o DateTime financeOfficerSignedDate optional
+}
+
+/**
+ * One pay item on a pay request. The item, description, unit, contract
+ * quantity and unit price come from the contract's Bid Form as of the
+ * application's date; the rest is this period's.
+ *
+ * completed and approvedByEngineer are the form's two checkboxes. An
+ * unchecked box is false, not absent: it is a statement that the item is
+ * not (yet) completed or approved.
+ */
+concept PayItemLine {
+  @description("e.g. 5.1")
+  o String payItem
+  o String description
+  o String unit
+  o Double contractQuantity optional
+  o Double unitPrice optional
+  o Double quantityThisPeriod optional
+  o Double quantityToDate optional
+  o Double amountThisPeriod optional
+  o Double amountToDate optional
+  o Boolean completed
+  o Boolean approvedByEngineer
+}

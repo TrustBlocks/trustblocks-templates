@@ -1,4 +1,5 @@
-;; Checks every template under templates/ against Accord Project's own
+;; Checks every template -- under templates/, and each package's under
+;; packages/<package>/templates/ -- against Accord Project's own
 ;; toolchain: cicero-core must load the archive, and template-engine must
 ;; draft it from its own sample.json. Exits non-zero on any failure.
 ;;
@@ -72,8 +73,19 @@
         f   (path/join "dist" (str (.-name pkg) "@" (.-version pkg) ".cta"))]
     (when (fs/existsSync f) f)))
 
-(p/let [root (or (first *command-line-args*) "templates")
-        dirs (template-dirs root)]
+(defn- all-template-dirs
+  "templates/ and every package's templates/, or just `root` when given."
+  [root]
+  (if root
+    (template-dirs root)
+    (sort (concat (template-dirs "templates")
+                  (when (fs/existsSync "packages")
+                    (mapcat #(template-dirs (path/join "packages" % "templates"))
+                            (sort (fs/readdirSync "packages"))))))))
+
+(p/let [arg  (first *command-line-args*)
+        root (or arg "templates/ and packages/")
+        dirs (all-template-dirs arg)]
   (if (empty? dirs)
     (println (str "No templates found under " root " (looking for directories with a package.json)."))
     (p/let [archives (keep (fn [d] (when-let [a (built-archive d)] [d a])) dirs)

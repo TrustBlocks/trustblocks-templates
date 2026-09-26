@@ -13,13 +13,28 @@
   (:import [java.io PushbackReader]
            [java.util.zip ZipEntry ZipOutputStream]))
 
+(defn- template-dirs-under [dir]
+  (when (fs/exists? dir)
+    (filter #(fs/exists? (fs/path % "package.json")) (fs/list-dir dir))))
+
 (defn templates
-  "Every template directory: a directory under templates/ with a package.json,
-  which is what cicero-core keys on."
+  "Every template directory -- a directory with a package.json, which is what
+  cicero-core keys on: those under templates/, and each package's, under
+  packages/<package>/templates/."
   []
-  (->> (fs/list-dir "templates")
-       (filter #(fs/exists? (fs/path % "package.json")))
+  (->> (concat (template-dirs-under "templates")
+               (when (fs/exists? "packages")
+                 (mapcat #(template-dirs-under (fs/path % "templates")) (fs/list-dir "packages"))))
        (sort-by str)))
+
+(defn- label
+  "A template's name for reports: its directory, after its package when it
+  has one -- street-resurfacing/pay-application."
+  [dir]
+  (let [parts (map str (fs/components (fs/relativize (fs/cwd) (fs/absolutize dir))))]
+    (if (= "packages" (first parts))
+      (str (nth parts 1) "/" (last parts))
+      (last parts))))
 
 ;; ------------------------------------------------------------------ check
 
@@ -147,13 +162,13 @@
         dir    (templates)
         :let   [copy (fs/path dir "model" (fs/file-name shared))]
         :when  (and (fs/exists? copy) (not= (slurp (str shared)) (slurp (str copy))))]
-    (str (fs/file-name dir) ": model/" (fs/file-name shared)
+    (str (label dir) ": model/" (fs/file-name shared)
          " differs from shared/model/" (fs/file-name shared))))
 
 (defn check []
-  (let [results (for [dir (templates)] [(fs/file-name dir) (problems dir)])
+  (let [results (for [dir (templates)] [(label dir) (problems dir)])
         shared  (shared-copy-problems)]
-    (println (str "Checking " (count results) " template(s) under templates/"))
+    (println (str "Checking " (count results) " template(s) under templates/ and packages/"))
     (doseq [[name ps] results]
       (if (empty? ps)
         (println "  ok   " name)

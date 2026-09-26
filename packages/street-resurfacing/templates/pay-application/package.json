@@ -1,0 +1,10 @@
+{
+    "name": "street-resurfacing-pay-application",
+    "version": "0.1.0",
+    "description": "Contractor Pay Request under a unit-price street resurfacing contract. Derived from Exhibit \"E\" of the Town of China Grove's Street Resurfacing bid package, Contract No. STR-27, with a per-item schedule of quantities and inspection approvals and a Finance Officer's payment certificate added for the Town Attorney's review.",
+    "accordproject": {
+        "runtime": "typescript",
+        "template": "contract",
+        "cicero": "^2.0.0"
+    }
+}
