@@ -155,6 +155,9 @@ concept ManagerEmploymentState identified by contractId {
 // (`transaction LateDeliveryAndPenaltyRequest extends Request`). Both are
 // empty markers; the value is that a runtime can recognise these as a
 // trigger pair rather than as two unrelated transactions.
+/**
+ * The Town Council approves the contract, on councilActionDate.
+ */
 transaction BoardApprovalRequest extends Request {
   o DateTime requestedAt
 }

@@ -210,6 +210,13 @@
          (concat
           (when-not (or logic lifecycle)
             ["package.json's trustblocks section names neither logic nor a lifecycle"])
+          ;; Who may attest to the contract is the contract's to say.
+          (when-let [attestation (get tb "attestation")]
+            (concat
+             (when-not (re-matches #"[A-Z][A-Z_]*" (str (get attestation "authority")))
+               ["trustblocks.attestation.authority must be an AUTHORITY name"])
+             (when-not logic
+               ["trustblocks.attestation needs logic: the clause answers the AttestationRequest"])))
           (when logic
             (concat
              (when-not (trustblocks-runtimes (get tb "runtime"))

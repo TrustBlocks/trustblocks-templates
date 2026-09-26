@@ -67,6 +67,14 @@ The same section names a template's lifecycle, when it has one -- see
 "trustblocks": { "lifecycle": "lifecycle.json" }
 ```
 
+And the authority an officeholder needs to attest to the contract, when the
+contract accepts attestations (its clause answers the `AttestationRequest`):
+
+```json
+"trustblocks": { "runtime": "clojure", "logic": "logic/clause.clj",
+                 "attestation": { "authority": "CERTIFY_MINUTES" } }
+```
+
 `logic/clause.clj` is one expression — the clause — evaluated in Trustblocks'
 sandbox with four bindings: `data` (the contract), `request`, `state` (the
 contract's state as of the request's own time, or `nil`), and `now` (when the
