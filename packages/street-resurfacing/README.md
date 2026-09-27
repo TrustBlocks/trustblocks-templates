@@ -44,11 +44,21 @@ template:
 | RECEIVED | `InspectionCertified` | INSPECTED | Attestation, `CERTIFY_INSPECTIONS`; or Receipt, `RECEIVE_INSPECTION_REPORTS` |
 | INSPECTED | `PayRequestCertified` | CERTIFIED | Attestation, `CERTIFY_PAY_APPLICATIONS` |
 | CERTIFIED | `PaymentApproved` | APPROVED | Attestation, `APPROVE_PAYMENTS` |
-| APPROVED | `PaymentOverdue` | OVERDUE | 30 days pass (Sec. 6) |
-| APPROVED, OVERDUE | `PaymentCertified` | PAID (final) | Attestation, `CERTIFY_PAYMENTS` |
+| APPROVED | `PaymentCertified` | PAID (final) | Attestation, `CERTIFY_PAYMENTS` |
 | RECEIVED, INSPECTED, CERTIFIED | `PayRequestReturned` | RETURNED (final) | Attestation, `CERTIFY_PAY_APPLICATIONS` |
 
 A returned request is finished; the corrected one is a new document.
+
+## Deadlines
+
+Shown on the timeline and the dashboards; never acted on (see
+[`docs/model-conventions.md`](../../docs/model-conventions.md#deadlines)).
+
+| Template | Deadline | Counted | Met by |
+|---|---|---|---|
+| contract | Completion Date (Sec. 5); liquidated damages may be assessed after (GC 22) | Notice to Proceed Date + `completionDays` | -- |
+| pay application | Inspection Certificate due (GC 18(b)) | entering RECEIVED + the contract's `inspectionPeriodDays` | INSPECTED onward, or RETURNED |
+| pay application | Payment due (Sec. 6) | entering APPROVED + 30 days | PAID |
 
 ## The pay application's clause
 

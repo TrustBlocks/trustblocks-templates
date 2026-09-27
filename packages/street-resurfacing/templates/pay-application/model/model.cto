@@ -160,9 +160,6 @@ transaction PaymentApproved extends Request {
 transaction PaymentCertified extends Request {
 }
 
-/** Thirty days pass after approval without payment (Sec. 6). */
-transaction PaymentOverdue extends Request {
-}
 
 /** Returned to the Contractor for correction; a corrected request is a new document. */
 transaction PayRequestReturned extends Request {

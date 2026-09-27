@@ -119,8 +119,9 @@ a JSON file named by `package.json`'s `trustblocks.lifecycle`, typed by
 vendored into the template's `model/`). It declares the states, and for each
 event -- a `Request` transaction in the template's own namespace -- the states
 it may occur in, the state it leads to, and the certification it requires: a
-`Receipt` or `Attestation` by someone holding a named authority. A timed event
-(`afterDays`) is certified by nobody; time makes it happen.
+`Receipt` or `Attestation` by someone holding a named authority. Every event
+is certified: nothing moves a document on its own. A date passing is a
+deadline (below), shown and never acted on.
 
 A runtime supplies what the contract cannot: it verifies that the
 certification is genuine and was held under that authority at the time of the
@@ -139,7 +140,32 @@ Goodenough, "Contract as Automaton":
 - no dead ends: every state that is not accepting has an event leaving it, and
   no event leaves an accepting state;
 - deterministic: one transition per event per state;
-- every transition is certified or timed, never neither, and never both;
+- every transition is certified;
 - certifications name a `Receipt` or `Attestation` and an authority.
 
 `bb conformance` checks the file against the model with Concerto itself.
+
+## Deadlines
+
+The dates a contract sets -- the Completion Date, when a payment falls due,
+when an inspection is owed -- are declared as data: a JSON file named by
+`package.json`'s `trustblocks.deadlines`, typed by
+`com.trustblocks.deadline@1.0.0.Deadlines` (`shared/model/deadline.cto`,
+vendored into the template's `model/`). Each deadline counts from a
+DateTime property (`fromField`) or from when the document entered a
+lifecycle state (`fromState`), for a number of `days` or the days in an
+Integer property (`daysField`). A field is read from the document itself or,
+with `"source": "TERMS"`, from its matter's terms -- a pay request's
+inspection deadline uses the contract's own inspection period. `metBy`
+names the states in which it has been met.
+
+**A deadline is shown, never acted on.** No state changes and no notice goes
+out because a date passes: assessing liquidated damages or declaring a
+default is the Town's decision, and it enters the record when a person makes
+it and certifies it. Trustblocks is reactive: it records what the Town
+receives and does.
+
+`bb check` requires exactly one starting point and one duration per
+deadline, states that exist in the lifecycle, and fields of the right type --
+in the package's contract template when the source is `TERMS`.
+`bb conformance` checks the file against the model with Concerto.

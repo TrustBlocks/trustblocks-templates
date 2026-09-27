@@ -42,10 +42,8 @@ concept Transition {
   @description("The states the event may occur in; none when the event begins the document's lifecycle")
   o String[] from
   o String to
-  @description("Any one of these certifies the event; none for a timed event")
+  @description("Any one of these certifies the event. Every event is certified: nothing moves a document on its own -- a date passing is a deadline (deadline.cto), shown, not acted on")
   o Certification[] requires
-  @description("A timed event: it may occur only this many calendar days after the document entered its current state")
-  o Integer afterDays optional
 }
 
 /**
