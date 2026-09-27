@@ -2,7 +2,7 @@
 
 **Street Resurfacing — Contract No. {{contractNumber}}**
 
-This contract (together with all exhibits and valid amendments, the “Agreement” or the “Contract”) is made and entered into as of the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “K,” by the TOWN OF CHINA GROVE, a North Carolina municipal corporation (“Town”), and {{#optional contractorName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} (“Contractor”), {{#optional contractorEntityType}}{{this}}{{else}}( ) a corporation, ( ) a professional corporation, ( ) a professional association, ( ) a limited liability company, ( ) a limited partnership, ( ) a sole proprietorship, or ( ) a general partnership{{/optional}}; organized and existing under the laws of the State of {{#optional contractorStateOfOrganization}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} and authorized to transact business in the State of North Carolina.
+This contract (together with all exhibits and valid amendments, the “Agreement” or the “Contract”) is made and entered into as of the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “J,” by the TOWN OF CHINA GROVE, a North Carolina municipal corporation (“Town”), and {{#optional contractorName}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} (“Contractor”), {{#optional contractorEntityType}}{{this}}{{else}}( ) a corporation, ( ) a professional corporation, ( ) a professional association, ( ) a limited liability company, ( ) a limited partnership, ( ) a sole proprietorship, or ( ) a general partnership{{/optional}}; organized and existing under the laws of the State of {{#optional contractorStateOfOrganization}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} and authorized to transact business in the State of North Carolina.
 
 **Sec. 1. Background and Purpose.**
 
@@ -36,7 +36,7 @@ Retainage shall be governed by N.C. Gen. Stat. § 143-134.1. The Town shall with
 
 **Sec. 5. Term.**
 
-The Contractor shall commence work on the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “K” (the “Commence Date”) and shall complete the work within {{completionDaysWritten}} ({{completionDays}}) calendar days from the Commence Date (the “Completion Date”). All work set forth in the Scope of Services at Exhibit “A” shall be completed between the Commence Date and the Completion Date. Any portion of the work that the Town specifies and directs to be completed on a date before the Completion Date shall be set out in writing between the Town and the Contractor. Time is of the essence.
+The Contractor shall commence work on the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “J” (the “Commence Date”) and shall complete the work within {{completionDaysWritten}} ({{completionDays}}) calendar days from the Commence Date (the “Completion Date”). All work set forth in the Scope of Services at Exhibit “A” shall be completed between the Commence Date and the Completion Date. Any portion of the work that the Town specifies and directs to be completed on a date before the Completion Date shall be set out in writing between the Town and the Contractor. Time is of the essence.
 
 If the Contractor's obligations are not completed by the Completion Date or other specified date, the Town reserves the right to terminate this Agreement, order the Contractor to cease all work and vacate the premises, and procure equivalent services. The Contractor shall be accountable for all damages incurred by the Town as a consequence of the missed Completion Date. The exercise of any of these rights shall not prejudice any other right the Town may have at law or in equity.
 
@@ -109,11 +109,11 @@ The following attachments are made a part of this Contract and incorporated here
 
 (h) Exhibit “H” — Special Provisions and Conditions.
 
-(j) Exhibit “I” — Notice of Award.
+(i) Exhibit “I” — Notice of Award.
 
-(k) Exhibit “J” — Notice to Proceed.
+(j) Exhibit “J” — Notice to Proceed.
 
-(l) Attachment 1 — Street Schedule.
+(k) Attachment 1 — Street Schedule.
 
 In case of conflict between an attachment and the text of this contract excluding the attachment, the text of this contract shall control. Any attachment that materially alters the standard terms contained herein must be reviewed by the Town Attorney and approved by the Town in writing.
 
@@ -283,7 +283,7 @@ Date: {{#optional preAuditDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_
 
 **SCOPE OF SERVICES / FEE FOR SCOPE OF SERVICES**
 
-This document is an Exhibit to the Agreement for Street Resurfacing, Contract No. {{contractNumber}}, between the TOWN OF CHINA GROVE and {{#optional contractorName}}{{this}}{{else}}\[CONTRACTOR\]{{/optional}}, dated as of the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “K.”
+This document is an Exhibit to the Agreement for Street Resurfacing, Contract No. {{contractNumber}}, between the TOWN OF CHINA GROVE and {{#optional contractorName}}{{this}}{{else}}\[CONTRACTOR\]{{/optional}}, dated as of the Notice to Proceed Date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} specified on EXHIBIT “J.”
 
 **Scope of Services**
 
@@ -325,9 +325,15 @@ The Town of China Grove is soliciting formal bids under N.C. Gen. Stat. § 143-1
 
 **Contractor —** The Contractor named in the contract documents.
 
-**Designated Representative (or Designee) —** An individual or individuals appointed and authorized to represent the Director.
+**Certificate of Final Acceptance —** A written certificate, signed by the Director and the Town Manager, stating the date on which the Work was finally accepted. The Town shall issue it, or state in writing what remains to be done, within {{finalAcceptancePeriodDaysWritten}} ({{finalAcceptancePeriodDays}}) days after the Contractor's written notice that the Work is complete. The warranty under Sec. 9(a) runs from that date.
+
+**Designated Representative (or Designee) —** An individual appointed in writing by the Director, which writing identifies the contract, the authority delegated, and the period of the appointment.
 
 **Director —** The Town of China Grove Director of Public Works or the Director's designated representative.
+
+**Engineer —** A professional engineer licensed in North Carolina whom the Town designates in writing to inspect and certify the Work, or the Town's own engineer.
+
+**Inspection Certificate —** A written certificate, signed by the Engineer or the Director, identifying the pay items and quantities inspected; the quantities approved as complete; the quantities rejected, with the reasons; the tests relied on; and the date of inspection. A certificate issued by a person other than a Town officer takes effect when the Director certifies its receipt.
 
 **Manager —** The Town Manager of the Town of China Grove.
 
@@ -363,7 +369,7 @@ The Director, acting directly or through duly authorized representatives, will d
 
 **4) Contract Time, Notice to Proceed, and Town's Right to Terminate**
 
-The commencement date of this contract is the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} indicated on the Notice to Proceed, Exhibit “K,” and the contract shall end {{completionDaysWritten}} ({{completionDays}}) calendar days after that date (the “Completion Date”). The Contractor shall start work as directed as soon as possible after issuance of a Notice to Proceed and Town purchase order number, but in no event later than two (2) weeks after delivery of the Notice to Proceed and purchase order number. Any request for delay in starting work shall be made in writing by the Contractor with detailed justification. The Town shall have the right to suspend work or to terminate the contract after giving at least ten (10) days' written notice of suspension or termination to the Contractor.
+The commencement date of this contract is the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} indicated on the Notice to Proceed, Exhibit “J,” and the contract shall end {{completionDaysWritten}} ({{completionDays}}) calendar days after that date (the “Completion Date”). The Contractor shall start work as directed as soon as possible after issuance of a Notice to Proceed and Town purchase order number, but in no event later than two (2) weeks after delivery of the Notice to Proceed and purchase order number. Any request for delay in starting work shall be made in writing by the Contractor with detailed justification. The Town shall have the right to suspend work or to terminate the contract after giving at least ten (10) days' written notice of suspension or termination to the Contractor.
 
 Renewal of this contract for one (1) additional term is permitted only by written amendment executed before the Completion Date, as provided in Sec. 5 of the Standard Form Construction Contract, and is contingent upon appropriation of funds under N.C. Gen. Stat. § 159-28. This contract does not renew automatically.
 
@@ -482,6 +488,14 @@ Asphalt Binder Price Adjustment. Price adjustments for asphalt binder for plant 
 
 Inspection, quality control management, and required testing shall be in accordance with the Standard Specifications and the requirements shown in the contract documents. Any road on which more than fifty percent (50%) of the work is deemed by the Town or the Town's representative to be unacceptable, or on which two (2) or more joints extend the whole extent of the roadway, shall be rectified at the Contractor's expense. The Town or the Town's representative may at any time request cores of completed roads to verify depths and asphalt types.
 
+(a) Work shall be inspected, tested and verified as the Standard Specifications, the contract documents, and the verification tier stated in the Special Provisions require.
+
+(b) Within {{inspectionPeriodDaysWritten}} ({{inspectionPeriodDays}}) days after receipt of a Contractor Pay Request, the Town shall inspect the work for which payment is requested and issue an Inspection Certificate.
+
+(c) Only quantities approved in an Inspection Certificate shall be included in a payment. Rejected quantities shall be identified with reasons, and may be requested again once corrected.
+
+(d) Approval of quantities for a progress payment is not final acceptance of the Work.
+
 **19) Oral Agreements and Claims for Additional Compensation**
 
 No oral order, objection, claim, or notice by any party to the others shall affect or modify any of the terms or obligations contained in the contract documents, other than by a definitely agreed waiver or modification by both the Contractor and the Town in writing.
@@ -490,7 +504,7 @@ Any claim for additional compensation shall be submitted in writing to the Direc
 
 **20) Litigation Venue**
 
-Any controversy or litigation arising out of this Contract shall be resolved in the courts of Rowan County, North Carolina, or, if federal jurisdiction is properly invoked and this provision is held not to bar removal, the United States District Court for the Middle District of North Carolina. Also refer to Sec. 15 of the Standard Form Construction Contract for Street Resurfacing, Contract No. {{contractNumber}}.
+Any controversy or litigation arising out of this Contract shall be resolved in the appropriate division of the North Carolina General Court of Justice sitting in Rowan County, North Carolina, and shall neither be commenced in nor removed to federal court. Also refer to Sec. 15 of the Standard Form Construction Contract for Street Resurfacing, Contract No. {{contractNumber}}.
 
 **21) Submission and Rejection of Bids**
 
@@ -732,9 +746,9 @@ Total Bid written in words: {{#optional totalBidWritten}}{{this}}{{else}}\_\_\_\
 
 *Note: The Total Bid is the sum of the section totals. No contingency line is included; project contingency, if any, is held by the Town in the project budget and is not bid or priced by the Bidder. In the event of a discrepancy between a unit price and an extended amount, the unit price shall govern; in the event of a discrepancy between the sum of the section totals and the Total Bid, the sum of the section totals shall govern.*
 
-This bid shall not include any unauthorized additions, deletions, or conditions. The Bidder agrees that any and all excavations are unclassified. This bid will remain subject to acceptance for sixty (60) days after the date of submittal, and once accepted and the contract executed between the Town and the Contractor, the unit prices shall remain as submitted herewith until {{completionDays}} days from the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} noted on the Notice to Proceed, Exhibit “K.”
+This bid shall not include any unauthorized additions, deletions, or conditions. The Bidder agrees that any and all excavations are unclassified. This bid will remain subject to acceptance for sixty (60) days after the date of submittal, and once accepted and the contract executed between the Town and the Contractor, the unit prices shall remain as submitted herewith until {{completionDays}} days from the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} noted on the Notice to Proceed, Exhibit “J.”
 
-The Bidder agrees that the work will be completed and ready for final payment on or before {{completionDays}} days from the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} noted on the Notice to Proceed, Exhibit “K.”
+The Bidder agrees that the work will be completed and ready for final payment on or before {{completionDays}} days from the date{{#optional noticeToProceedDate}}, {{this as "MMMM D, YYYY"}},{{/optional}} noted on the Notice to Proceed, Exhibit “J.”
 
 ***Do Not Separate the Bid Form and Signature of Bidder sheets from the Contract document book.***
 
@@ -825,6 +839,14 @@ The Contractor shall place door hangers or equivalent written notice at each occ
 **SC-15. Public Records and Trade Secrets**
 
 Bids submitted to the Town are public records under Chapter 132 of the North Carolina General Statutes following the opening of bids. A Bidder that contends any portion of its submission constitutes a trade secret must identify that material specifically and conspicuously at the time of submission and must comply with N.C. Gen. Stat. § 132-1.2. A blanket designation of an entire bid as confidential or proprietary will not be honored, and submission of such a designation does not obligate the Town to withhold any record.
+
+**SC-16. Verification Tier and Verifiers**
+
+This Contract is verification Tier {{verificationTier}}: {{verificationRequirement}} Each kind of work is verified, and escalated, as follows:
+
+{{#ulist verifiers}}
+{{work}} — verified by {{verifier}}{{#optional escalatesTo}}; escalated to {{this}}{{/optional}}{{#optional escalationWhen}} ({{this}}){{/optional}}
+{{/ulist}}
 
 **ATTACHMENT 1 — STREET SCHEDULE**
 

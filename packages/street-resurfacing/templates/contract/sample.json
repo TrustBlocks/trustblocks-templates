@@ -17,6 +17,76 @@
   "completionDaysWritten": "two hundred seventy",
   "liquidatedDamagesPerDay": 500.0,
   "liquidatedDamagesPerDayWritten": "five hundred dollars",
+  "inspectionPeriodDays": 10,
+  "inspectionPeriodDaysWritten": "ten",
+  "finalAcceptancePeriodDays": 30,
+  "finalAcceptancePeriodDaysWritten": "thirty",
+  "verificationTier": 4,
+  "verificationRequirement": "an Engineer of record and a testing laboratory; NCDOT and environmental certificates where triggered; and final acceptance by the Director and the Town Manager.",
+  "verifiers": [
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Crack and joint sealing (1)",
+      "verifier": "the Zoning Administrator or Public Works staff",
+      "escalatesTo": "the Director of Public Works",
+      "escalationWhen": "disputed quantities"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Patching, leveling, seal coat (2)",
+      "verifier": "the Director of Public Works or designee",
+      "escalatesTo": "the Engineer",
+      "escalationWhen": "full-depth patching; sub-base placement"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Milling (3)",
+      "verifier": "the Director of Public Works or designee",
+      "escalatesTo": "the Engineer",
+      "escalationWhen": "depth disputes; milled edges over 2\" left open"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Reclamation, undercut, subgrade repair (4)",
+      "verifier": "the Engineer, with a testing laboratory",
+      "escalatesTo": "a geotechnical engineer",
+      "escalationWhen": "cement stabilization; unsuitable subgrade"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Asphalt resurfacing (5)",
+      "verifier": "the Director of Public Works, from weigh tickets",
+      "escalatesTo": "the Engineer, with cores and density tests",
+      "escalationWhen": "any road over 50% unacceptable (GC 18)"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Concrete curb, gutter, sidewalk, ramps (6)",
+      "verifier": "the Director of Public Works",
+      "escalatesTo": "the Engineer",
+      "escalationWhen": "wheelchair ramps (ADA/PROWAG compliance)"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Markings and raised markers (7)",
+      "verifier": "the Zoning Administrator or Public Works staff",
+      "escalatesTo": "NCDOT",
+      "escalationWhen": "any State-maintained route (SC-2)"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Work in NCDOT right-of-way",
+      "verifier": "the NCDOT district office",
+      "escalationWhen": "encroachment agreement terms"
+    },
+    {
+      "$class": "com.trustblocks.municipal.construction@1.0.0.VerifierAssignment",
+      "work": "Erosion and sediment control; stormwater",
+      "verifier": "an environmental engineer",
+      "escalatesTo": "NC DEQ",
+      "escalationWhen": "land disturbance thresholds; streams or wetlands"
+    }
+  ],
   "addenda": [],
   "crackAndJointSealingItems": [
     {

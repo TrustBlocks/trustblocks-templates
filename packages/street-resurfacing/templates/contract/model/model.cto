@@ -87,6 +87,19 @@ asset StreetResurfacingContract extends MunicipalAgreement {
   @description("When sealed bids are opened")
   o DateTime bidOpeningDate optional
 
+  // ---- Inspection and acceptance (General Conditions 1 and 18; SC-16) -------------
+  @description("Days after receipt of a Contractor Pay Request within which the Town inspects and issues an Inspection Certificate (GC 18(b))")
+  o Integer inspectionPeriodDays
+  o String inspectionPeriodDaysWritten
+  @description("Days after the Contractor's written notice of completion within which the Town issues the Certificate of Final Acceptance or states what remains (GC 1)")
+  o Integer finalAcceptancePeriodDays
+  o String finalAcceptancePeriodDaysWritten
+  @description("The verification tier, fixed by the contract amount at award (SC-16)")
+  o Integer verificationTier
+  @description("What the tier requires, as one sentence")
+  o String verificationRequirement
+  o VerifierAssignment[] verifiers
+
   // ---- Money --------------------------------------------------------------------
   @description("Liquidated damages per calendar day of delay (General Conditions 22)")
   o Double liquidatedDamagesPerDay
@@ -187,4 +200,17 @@ concept StreetSegment {
 concept Addendum {
   o String addendumNumber
   o DateTime dated
+}
+
+/**
+ * Who verifies one kind of work, and to whom it escalates (SC-16) -- a row of
+ * the verification table in the Special Provisions.
+ */
+concept VerifierAssignment {
+  @description("The kind of work, e.g. Milling (3)")
+  o String work
+  o String verifier
+  o String escalatesTo optional
+  @description("When it escalates, e.g. Depth disputes")
+  o String escalationWhen optional
 }
