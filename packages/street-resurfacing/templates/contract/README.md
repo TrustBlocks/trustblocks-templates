@@ -35,18 +35,34 @@ quantities installed and accepted at the unit prices, statutory retainage
 (§ 143-134.1), liquidated damages, certified by the Director of Public Works
 and approved by the Town Manager.
 
-## Found in the source document
+## Revisions (0.3.0)
 
-Preserved as written, not corrected:
+The Town Attorney's memo on STR-27 (September 2026) proposed five revisions
+and noted five drafting defects. This version carries the revisions and
+four of the corrections; the same changes are marked as tracked changes in
+[`sources/`](../../../../sources/) (`… Bid Package - Revisions (redline).docx`)
+for review against the original. The memo's bracketed figures are data, not
+text: change them per contract.
 
-1. The Notice to Proceed is Exhibit "J" (Sec. 11(k)), but the preamble,
-   Sec. 5, Exhibit A, General Conditions 4 and the Bid Sheet all cite
-   Exhibit "K", which does not exist.
-2. Sec. 11's list skips (i): (h), then (j), (k), (l).
-3. Unit prices hold for 365 calendar days under General Conditions 17, but
-   until 270 days from the Notice to Proceed under the Bid Sheet.
-4. General Conditions 20 allows the U.S. District Court (M.D.N.C.);
-   Sec. 15(a) says no action shall be commenced in or removed to federal
-   court.
-5. The Notice to Proceed (Exhibit J) describes a narrower scope than Sec. 2
-   and Exhibit A.
+| | Where | Change | As data |
+|---|---|---|---|
+| R1 | GC 1 | *Engineer* and *Inspection Certificate* defined | |
+| R2 | GC 1 | A Designated Representative is appointed in writing, naming the contract, the authority and the period | |
+| R3 | GC 18 | (a)–(d): inspection by tier; an Inspection Certificate within the inspection period after each pay request; only approved quantities paid; progress approval is not final acceptance | `inspectionPeriodDays` (10) |
+| R4 | SC-16 (new) | The verification tier and who verifies each kind of work | `verificationTier` (4), `verificationRequirement`, `verifiers` |
+| R5 | GC 1 | *Certificate of Final Acceptance* defined; the warranty runs from its date | `finalAcceptancePeriodDays` (30) |
+
+Drafting defects:
+
+1. **Corrected.** The Notice to Proceed is Exhibit "J", and every citation
+   (six, in the preamble, Sec. 5, Exhibit A, General Conditions 4 and the
+   Bid Sheet) now says so.
+2. **Corrected.** Sec. 11 is re-lettered (a)–(k).
+3. **Open -- needs the Town's decision.** Unit prices hold for 365 calendar
+   days under General Conditions 17, but until 270 days from the Notice to
+   Proceed under the Bid Sheet. Left as written until one period is chosen.
+4. **Corrected.** General Conditions 20 now matches Sec. 15(a): Rowan County
+   state courts, never federal court.
+5. **In the Word document only.** The Notice to Proceed (Exhibit J) states a
+   narrower scope than Sec. 2 and Exhibit A. The form is not reproduced in
+   this template; the redline corrects it.
