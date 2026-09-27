@@ -1,0 +1,40 @@
+namespace com.trustblocks.deadline@1.0.0
+
+/**
+ * The dates a contract sets, declared as data: the Completion Date, when a
+ * payment falls due, when an inspection is owed. A template carries them
+ * beside its model and text (package.json's trustblocks.deadlines names
+ * the file).
+ *
+ * A deadline is shown, never acted on. Nothing moves a document, and no
+ * notice is generated, because a date passes: whether the Town assesses
+ * liquidated damages or declares a default is a decision, recorded when a
+ * person makes it and certifies it. A deadline says only when, counted
+ * from what, and what meets it.
+ */
+concept Deadlines {
+  o Deadline[] deadlines
+}
+
+concept Deadline {
+  o String name
+  @description("What it means, and what may follow -- the contract's words, e.g. Sec. 6")
+  o String description optional
+  @description("Counted from a DateTime property -- of the document, or of its matter's terms (source)")
+  o String fromField optional
+  @description("Counted from when the document entered this lifecycle state")
+  o String fromState optional
+  @description("A fixed number of days")
+  o Integer days optional
+  @description("Days read from an Integer property -- of the document, or of its matter's terms (source)")
+  o String daysField optional
+  @description("Where fromField and daysField are read; DOCUMENT when absent")
+  o FieldSource source optional
+  @description("Lifecycle states in which the deadline has been met")
+  o String[] metBy optional
+}
+
+enum FieldSource {
+  o DOCUMENT
+  o TERMS
+}

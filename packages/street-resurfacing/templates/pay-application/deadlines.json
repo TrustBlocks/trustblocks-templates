@@ -1,0 +1,30 @@
+{
+  "$class": "com.trustblocks.deadline@1.0.0.Deadlines",
+  "deadlines": [
+    {
+      "$class": "com.trustblocks.deadline@1.0.0.Deadline",
+      "name": "Inspection Certificate due",
+      "description": "GC 18(b): within the inspection period after receipt of a Contractor Pay Request, the Town inspects the work and issues an Inspection Certificate.",
+      "fromState": "RECEIVED",
+      "daysField": "inspectionPeriodDays",
+      "source": "TERMS",
+      "metBy": [
+        "INSPECTED",
+        "CERTIFIED",
+        "APPROVED",
+        "PAID",
+        "RETURNED"
+      ]
+    },
+    {
+      "$class": "com.trustblocks.deadline@1.0.0.Deadline",
+      "name": "Payment due",
+      "description": "Sec. 6: periodic payments are made within thirty (30) days of approval.",
+      "fromState": "APPROVED",
+      "days": 30,
+      "metBy": [
+        "PAID"
+      ]
+    }
+  ]
+}

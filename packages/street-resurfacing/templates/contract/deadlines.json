@@ -1,0 +1,12 @@
+{
+  "$class": "com.trustblocks.deadline@1.0.0.Deadlines",
+  "deadlines": [
+    {
+      "$class": "com.trustblocks.deadline@1.0.0.Deadline",
+      "name": "Completion Date",
+      "description": "Sec. 5: the work is complete within the completion days from the Notice to Proceed Date. After it, the Town may assess liquidated damages for each day of delay (GC 22) -- a decision the Town records when it makes it.",
+      "fromField": "noticeToProceedDate",
+      "daysField": "completionDays"
+    }
+  ]
+}

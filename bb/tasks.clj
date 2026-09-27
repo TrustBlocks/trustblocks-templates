@@ -127,6 +127,48 @@
                             (get t "to")))]
       (if (= more seen) seen (recur more)))))
 
+(defn- property-types
+  "Property name -> declared type, over model texts: `o DateTime dueDate`."
+  [texts]
+  (into {} (for [[_ type _ name] (re-seq #"(?m)^\s*o\s+(\w+)(\[\])?\s+(\w+)" (str/join "\n" texts))]
+             [name type])))
+
+(defn- terms-template
+  "The contract template of the package `dir` belongs to -- whose data a
+  deadline with source TERMS reads -- or nil outside a package."
+  [dir]
+  (let [parts (map str (fs/components (fs/relativize (fs/cwd) (fs/absolutize dir))))]
+    (when (= "packages" (first parts))
+      (fs/path "packages" (second parts) "templates" "contract"))))
+
+(defn- deadline-problems
+  "Why the deadlines `dl` are not sound for a template whose own models
+  declare `own-types`, whose package's terms declare `terms-types`, and
+  whose lifecycle (if any) has `states`."
+  [dl own-types terms-types states]
+  (concat
+   (when (not= "com.trustblocks.deadline@1.0.0.Deadlines" (get dl "$class"))
+     ["deadlines: $class must be com.trustblocks.deadline@1.0.0.Deadlines"])
+   (mapcat
+    (fn [{:strs [name fromField fromState days daysField source metBy]}]
+      (let [at    (str "deadline " (pr-str name))
+            types (if (= "TERMS" source) terms-types own-types)
+            field (fn [f want]
+                    (cond
+                      (nil? types) [(str at ": source TERMS, but this template is in no package")]
+                      (not= want (get types f)) [(str at ": " f " is not " (if (= "Integer" want) "an " "a ") want " property of the "
+                                                      (if (= "TERMS" source) "terms" "document"))]))]
+        (concat
+         (when-not (= 1 (count (remove nil? [fromField fromState])))
+           [(str at " counts from exactly one of fromField or fromState")])
+         (when-not (= 1 (count (remove nil? [days daysField])))
+           [(str at " has exactly one of days or daysField")])
+         (when fromField (field fromField "DateTime"))
+         (when daysField (field daysField "Integer"))
+         (for [st (remove nil? (cons fromState metBy)) :when (not (contains? (set states) st))]
+           (str at " names " st ", which is not a state of the template's lifecycle")))))
+    (get dl "deadlines"))))
+
 (defn- lifecycle-problems
   "Why lifecycle `lc` is not a sound state machine for a template whose own
   models declare `names`, and whose shared models declare the Requests
@@ -148,7 +190,7 @@
      (when-not (some #(empty? (get % "from")) transitions)
        ["lifecycle: no transition begins the lifecycle (one with no from states)"])
      (mapcat
-      (fn [{:strs [event from to requires afterDays]}]
+      (fn [{:strs [event from to requires]}]
         (let [at (str "lifecycle: " event)]
           (concat
            (when-not (or (requests event) (shared-requests event))
@@ -160,13 +202,9 @@
                                  (re-matches #"[A-Z][A-Z_]*" (str authority))))]
              (str at " requires " credential "/" authority
                   " -- a credential of " (sort credential-types) " and an AUTHORITY name"))
-           (cond
-             (and afterDays (seq requires))
-             [(str at " is timed; a timed event is certified by nobody")]
-             (and afterDays (empty? from))
-             [(str at " is timed, so it needs a state to count from")]
-             (and (nil? afterDays) (empty? requires))
-             [(str at " is neither certified nor timed")]))))
+           (when (empty? requires)
+             [(str at " is certified by nobody -- every event needs a Receipt or Attestation; "
+                   "a date passing is a deadline (deadlines.json), not an event")]))))
       transitions)
      ;; Deterministic: one transition per event per state.
      (for [[event ts] (group-by #(get % "event") transitions)
@@ -215,8 +253,25 @@
      (when tb
        (let [{:strs [logic lifecycle]} tb]
          (concat
-          (when-not (or logic lifecycle)
-            ["package.json's trustblocks section names neither logic nor a lifecycle"])
+          (when-not (or logic lifecycle (get tb "deadlines"))
+            ["package.json's trustblocks section names no logic, lifecycle or deadlines"])
+          (when-let [deadlines (get tb "deadlines")]
+            (cond
+              (not (fs/exists? (f deadlines)))
+              [(str "trustblocks.deadlines " deadlines " does not exist")]
+              (not (fs/exists? (f "model/deadline.cto")))
+              ["a template with deadlines carries model/deadline.cto, copied from shared/model/"]
+              :else
+              (let [terms (terms-template dir)]
+                (deadline-problems
+                 (json/parse-string (slurp (f deadlines)))
+                 (property-types (map #(slurp (str %)) (own-model-files ctos)))
+                 (when (and terms (fs/exists? terms))
+                   (property-types (map #(slurp (str %))
+                                        (own-model-files (fs/glob (fs/path terms "model") "*.cto")))))
+                 (when lifecycle
+                   (map #(get % "name")
+                        (get (json/parse-string (slurp (f lifecycle))) "states")))))))
           (when logic
             (concat
              (when-not (trustblocks-runtimes (get tb "runtime"))

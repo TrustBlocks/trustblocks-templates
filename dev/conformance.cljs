@@ -57,6 +57,9 @@
                  _      (when-let [lc (some-> pkg .-trustblocks .-lifecycle)]
                           (.fromJSON (.getSerializer t)
                                      (js/JSON.parse (fs/readFileSync (path/join dir lc) "utf8"))))
+                 _      (when-let [dl (some-> pkg .-trustblocks .-deadlines)]
+                          (.fromJSON (.getSerializer t)
+                                     (js/JSON.parse (fs/readFileSync (path/join dir dl) "utf8"))))
                  ;; A directive that reaches the output was not parsed as
                  ;; one -- e.g. an inline block spanning a paragraph break.
                  ;; Accord drafts it without complaint, so check for it here.
