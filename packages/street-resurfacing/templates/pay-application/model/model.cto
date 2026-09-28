@@ -87,6 +87,10 @@ asset ContractorPayRequest identified by payRequestId {
   o DateTime managerSignedDate optional
 
   // ---- Payment certificate (added) --------------------------------------------------
+  @description("The payee's vendor number, from its Vendor Information Form")
+  o String payeeVendorNumber optional
+  @description("The payee's invoice payment terms, from its Vendor Information Form")
+  o String paymentTerms optional
   o Double amountPaid optional
   o DateTime paidDate optional
   @description("Check or electronic funds transfer number")

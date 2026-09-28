@@ -66,6 +66,8 @@ Town Manager: {{#optional managerSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_
 
 *Added by Trustblocks for the Town Attorney's review.*
 
+Payee's vendor number: {{#optional payeeVendorNumber}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} Payment terms: {{#optional paymentTerms}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}
+
 I certify that payment of {{#optional amountPaid}}${{this as "0,0.00"}}{{else}}\$\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} was made to the Contractor on {{#optional paidDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} on this Pay Request, by check or electronic funds transfer No. {{#optional paymentReference}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}.
 
 Finance Officer: {{#optional financeOfficerSignature}}{{this}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}} Date: {{#optional financeOfficerSignedDate}}{{this as "MMMM D, YYYY"}}{{else}}\_\_\_\_\_\_\_\_\_\_\_\_{{/optional}}

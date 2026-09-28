@@ -1,0 +1,5 @@
+{
+  "$class": "com.trustblocks.municipal.construction.paymentbond@1.0.0.PaymentBond",
+  "bondId": "china-grove-str-27-payment-bond",
+  "contractNumber": "STR-27"
+}

@@ -1,0 +1,13 @@
+{
+    "name": "street-resurfacing-notice-of-award",
+    "version": "0.1.0",
+    "description": "The Notice of Award and Acceptance of Notice -- Exhibit \"I\" of the STR-27",
+    "accordproject": {
+        "runtime": "typescript",
+        "template": "contract",
+        "cicero": "^2.0.0"
+    },
+    "trustblocks": {
+        "deadlines": "deadlines.json"
+    }
+}

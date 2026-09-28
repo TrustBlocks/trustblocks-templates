@@ -1,0 +1,45 @@
+{
+  "$class": "com.trustblocks.lifecycle@1.0.0.Lifecycle",
+  "stateType": "VendorFormState",
+  "states": [
+    {
+      "$class": "com.trustblocks.lifecycle@1.0.0.LifecycleState",
+      "name": "RECEIVED"
+    },
+    {
+      "$class": "com.trustblocks.lifecycle@1.0.0.LifecycleState",
+      "name": "VENDOR_NUMBER_ASSIGNED",
+      "accepting": true
+    }
+  ],
+  "transitions": [
+    {
+      "$class": "com.trustblocks.lifecycle@1.0.0.Transition",
+      "event": "VendorFormReceived",
+      "from": [],
+      "to": "RECEIVED",
+      "requires": [
+        {
+          "$class": "com.trustblocks.lifecycle@1.0.0.Certification",
+          "credential": "Receipt",
+          "authority": "RECEIVE_FINANCE_FORMS"
+        }
+      ]
+    },
+    {
+      "$class": "com.trustblocks.lifecycle@1.0.0.Transition",
+      "event": "VendorNumberAssigned",
+      "from": [
+        "RECEIVED"
+      ],
+      "to": "VENDOR_NUMBER_ASSIGNED",
+      "requires": [
+        {
+          "$class": "com.trustblocks.lifecycle@1.0.0.Certification",
+          "credential": "Attestation",
+          "authority": "RECEIVE_FINANCE_FORMS"
+        }
+      ]
+    }
+  ]
+}

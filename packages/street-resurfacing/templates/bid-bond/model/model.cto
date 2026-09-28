@@ -1,0 +1,24 @@
+namespace com.trustblocks.municipal.construction.bidbond@1.0.0
+
+/**
+ * The Bid Bond -- Exhibit "F" of the STR-27 bid package: bid security of five
+ * percent (5%) of the total bid, executed by a corporate surety licensed in
+ * North Carolina (G.S. 143-129(b)). A bidder may instead deposit cash or a
+ * certified or cashier's check. Every blank is a field.
+ */
+@template
+asset BidBond identified by bondId {
+  o String bondId
+  o String principal optional
+  o String surety optional
+  o DateTime bidDate optional
+  @description("The Town's contract number, e.g. STR-27")
+  o String contractNumber
+  o DateTime signedDate optional
+  o String principalName optional
+  o String principalSignature optional
+  o String principalTitle optional
+  o String suretyName optional
+  @description("The surety's Attorney-in-Fact")
+  o String suretySignature optional
+}

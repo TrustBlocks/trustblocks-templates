@@ -3,18 +3,19 @@
 ;; com.trustblocks.manifest@1.0.0.Manifest (shared/model/manifest.cto);
 ;; `bb build` writes the same thing as manifest.json.
 ;;
-;; DRAFT for the Town Attorney's review, derived from the STR-27 bid package
-;; (sources/). Marked ";; TOWN:" where the Town decides.
+;; Derived from the STR-27 bid package (sources/), revised with the Town
+;; Attorney's decisions of September 2026. Marked "TOWN:" where the Town
+;; still decides.
 {:package "street-resurfacing"
  :title   "Street Resurfacing (unit-price construction, formally bid)"
- :summary "A formally bid, unit-price street resurfacing contract and every instrument around it: bid security, bonds, certificates, notices, the monthly pay requests with their inspection certificates, and closeout. Derived from the Town of China Grove's STR-27 bid package."
+ :summary "A formally bid, unit-price street resurfacing contract and every instrument around it: bid security, bonds, certifications, finance forms, the Notices of Award and to Proceed, the monthly pay requests with their inspection certificates, and closeout. Derived from the Town of China Grove's STR-27 bid package."
  :terms   "contract"
 
  :phases
  [{:name "BID"
    :description "Advertised and bid: the Invitation to Bid, the Bid Form with unit prices, and bid security."}
   {:name "AWARD"
-   :description "Awarded by the Town Council and executed: bonds, insurance, certifications, vendor setup, the Finance Officer's pre-audit."}
+   :description "Awarded by the Town Council and executed: the Notice of Award, then -- within its response days -- the contract, bonds, insurance, certifications and finance forms."}
   {:name "CONSTRUCTION"
    :description "From the Notice to Proceed: monthly pay requests, each inspected and certified, approved and paid."}
   {:name "CLOSEOUT"
@@ -26,82 +27,83 @@
    :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "BID" :required true
    :references ["gs-143-129" "gs-143-132"]
    :note "An overview of the solicitation; it binds no one once the contract is awarded."}
-  {:role "bid-security" :title "Bid security (bid bond or deposit)" :exhibit "F"
-   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "BID" :required true
-   :fields [{:name "form" :type "String" :description "Bid bond, cash, certified or cashier's check"}
-            {:name "amount" :type "Double" :description "Five percent (5%) of the total bid"}
-            {:name "surety" :type "String"}]
+  {:role "bid-bond" :title "Bid Bond" :exhibit "F"
+   :treatment "TEMPLATE" :template "bid-bond" :supplied-by "SURETY" :count "ONE" :phase "BID" :required false
+   :reads-terms ["contractNumber"]
    :references ["gs-143-129"]
-   :note "Returned to unsuccessful bidders; the successful bidder's is held until the contract bonds are delivered."}
+   :note "Bid security of five percent (5%) of the total bid -- this bond, or a deposit (below). The successful bidder's is held until the contract bonds are delivered."}
+  {:role "bid-deposit" :title "Bid deposit (cash, certified or cashier's check)"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "BID" :required false
+   :references ["gs-143-129"]
+   :note "The alternative to a bid bond; one of the two accompanies every bid."}
   {:role "debarment-certification" :title "Debarred Firms Certification" :exhibit "G"
    :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "BID" :required true
    :references ["gs-133-27"]}
 
   ;; ---- AWARD
-  {:role "notice-of-award" :title "Notice of Award" :exhibit "I"
-   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "AWARD" :required true
-   :fields [{:name "councilActionDate" :type "DateTime" :description "The Town Council's award"}]
+  {:role "notice-of-award" :title "Notice of Award and Acceptance of Notice" :exhibit "I"
+   :treatment "TEMPLATE" :template "notice-of-award" :supplied-by "TOWN" :count "ONE" :phase "AWARD" :required true
+   :reads-terms ["contractNumber" "managerName"]
    :references ["gs-143-129"]
-   :note "Planned as a modelled document: the Town issues it, so its data can be ours from the start."}
+   :note "Starts the response days (14) within which the contract documents below are due -- a deadline on the watch list."}
   {:role "contract" :title "Standard Form Construction Contract, with Exhibits A, G and H and Attachment 1"
    :treatment "TERMS" :template "contract" :supplied-by "TOWN" :count "ONE" :phase "AWARD" :required true
+   :refers-to ["notice-of-award"]
    :references ["gs-143-129" "gs-143-134-1" "gs-143-128" "gs-160a-485" "gs-159-28" "ncdot-standard-specifications" "mutcd"]
    :note "The terms: Sec. 1-18, Scope and Fee (A), General Conditions and the Bid Form with the successful bidder's unit prices (G), Special Provisions (H), the Street Schedule. Its signature page carries the Finance Officer's pre-audit certificate (G.S. 159-28)."}
   {:role "performance-bond" :title "Performance Bond" :exhibit "F"
-   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
-   :fields [{:name "surety" :type "String"}
-            {:name "bondNumber" :type "String"}
-            {:name "penalSum" :type "Double" :description "One hundred percent (100%) of the contract price"}
-            {:name "dated" :type "DateTime"}]
-   :refers-to ["contract"]
-   :references ["gs-44a-26"]
-   :note "Could become a modelled document if the Town wants the bond's terms as data, not only these facts."}
+   :treatment "TEMPLATE" :template "performance-bond" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
+   :reads-terms ["contractNumber"]
+   :refers-to ["contract" "notice-of-award"]
+   :references ["gs-44a-26" "gs-143-129"]
+   :note "One hundred percent (100%) of the contract price. TOWN: who receives and approves the bonds -- the Town Attorney as to form?"}
   {:role "payment-bond" :title "Payment Bond" :exhibit "F"
-   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
-   :fields [{:name "surety" :type "String"}
-            {:name "bondNumber" :type "String"}
-            {:name "penalSum" :type "Double" :description "One hundred percent (100%) of the contract price"}
-            {:name "dated" :type "DateTime"}]
-   :refers-to ["contract"]
-   :references ["gs-44a-26"]}
+   :treatment "TEMPLATE" :template "payment-bond" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
+   :reads-terms ["contractNumber"]
+   :refers-to ["contract" "notice-of-award"]
+   :references ["gs-44a-26" "gs-44a-27" "gs-143-129"]
+   :note "One hundred percent (100%) of the contract price."}
   {:role "certificate-of-insurance" :title "Certificate of Insurance" :exhibit "D"
    :treatment "STORED" :supplied-by "INSURER" :count "ANY" :phase "AWARD" :required true
-   :fields [{:name "insurer" :type "String"}
-            {:name "expirationDate" :type "DateTime" :deadline true
-             :description "Coverage must not lapse while work continues"}]
-   :note "The Town named as additional insured on every line but workers' compensation. Renewed certificates replace expiring ones -- hence ANY."}
+   :received-under "RECEIVE_FINANCE_FORMS"
+   :refers-to ["notice-of-award"]
+   :note "The insurer's form, not the Town's: received, not modelled. Renewals replace expiring certificates -- hence ANY."}
   {:role "e-verify-and-certifications" :title "E-Verify Affidavit and Certifications" :exhibit "B"
    :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "AWARD" :required true
+   :received-under "RECEIVE_FINANCE_FORMS"
+   :refers-to ["notice-of-award"]
    :references ["gs-64-26" "gs-143-133-3" "gs-147-86-58" "gs-147-86-81" "gs-133-32" "gs-14-234"]
-   :note "E-Verify, Iran Divestment, companies boycotting Israel, gift ban, conflict of interest."}
-  {:role "tax-forms" :title "Tax Forms (W-9)" :exhibit "C"
-   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "AWARD" :required true}
-  {:role "vendor-form" :title "Vendor Information Form" :exhibit "E"
+   :note "Received and certified by the Finance Director; its contents are not modelled."}
+  {:role "tax-forms" :title "IRS Form W-9" :exhibit "C"
    :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE_PER_PAYEE" :phase "AWARD" :required true
-   :fields [{:name "vendorNumber" :type "String" :description "Assigned by Town Finance"}
-            {:name "paymentTerms" :type "String"}
-            {:name "remitTo" :type "String"}]
-   :note "Sets the payee up in the Town's financial system. The payment certificate on each pay request names the vendor number and terms. TOWN: one per payee -- normally only the Contractor -- or also subcontractors or suppliers the Town pays directly?"}
+   :received-under "RECEIVE_FINANCE_FORMS"
+   :refers-to ["vendor-form"]
+   :note "The IRS's form, not the Town's: received and certified by the Finance Director, not modelled. One with each vendor form."}
+  {:role "vendor-form" :title "Vendor Information Form" :exhibit "E"
+   :treatment "TEMPLATE" :template "vendor-form" :supplied-by "CONTRACTOR" :count "ONE_PER_PAYEE" :phase "AWARD" :required true
+   :received-under "RECEIVE_FINANCE_FORMS"
+   :note "One for each party the Town pays. Received by the Finance Director, who assigns the vendor number each payment certificate names (its lifecycle)."}
 
   ;; ---- CONSTRUCTION
-  {:role "notice-to-proceed" :title "Notice to Proceed" :exhibit "J"
-   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "CONSTRUCTION" :required true
-   :fields [{:name "noticeToProceedDate" :type "DateTime" :description "The Commence Date; the Completion Date counts from it"}]
-   :note "Planned as a modelled document whose date the terms' Completion Date counts from."}
+  {:role "notice-to-proceed" :title "Notice to Proceed (Date of Availability)" :exhibit "J"
+   :treatment "TEMPLATE" :template "notice-to-proceed" :supplied-by "TOWN" :count "ONE" :phase "CONSTRUCTION" :required true
+   :reads-terms ["contractNumber" "managerName" "completionDays"]
+   :refers-to ["contract"]
+   :note "Names the Commence Date; the Completion Date counts from it (its deadline)."}
   {:role "pay-application" :title "Contractor Pay Request" :exhibit "E"
    :treatment "TEMPLATE" :template "pay-application" :supplied-by "CONTRACTOR" :count "ONE_PER_MONTH"
    :phase "CONSTRUCTION" :required true :received-under "RECEIVE_PAY_APPLICATIONS"
    :reads-terms ["contractNumber" "contractorName" "noticeToProceedDate" "completionDays"
                  "inspectionPeriodDays" "liquidatedDamagesPerDay" "resurfacingItems" "millingItems"]
-   :refers-to ["contract" "inspection-certificate" "vendor-form"]
+   :refers-to ["contract" "notice-to-proceed" "inspection-certificate" "vendor-form"]
    :references ["gs-143-134-1"]
-   :note "Due by the 25th of each month (Sec. 6). Its lifecycle and clause are in the template."}
+   :note "Due by the 25th of each month (Sec. 6). Its lifecycle and clause are in the template; its payment certificate names the payee's vendor number."}
   {:role "inspection-certificate" :title "Inspection Certificate"
    :treatment "STORED" :supplied-by "ENGINEER" :count "ONE_PER_MONTH" :phase "CONSTRUCTION" :required true
    :received-under "RECEIVE_INSPECTION_REPORTS"
-   :fields [{:name "inspectedOn" :type "DateTime"}]
    :refers-to ["pay-application"]
-   :note "Defined in GC 1 and required by GC 18(b), per the Town Attorney's revisions: within the inspection period after each pay request."}
+   :references ["ncdot-standard-specifications"]
+   :note "Defined in GC 1 and required by GC 18(b), per the Town Attorney's revisions: within the inspection period after each pay request. Whether the work conforms to the Standard Specifications is the Engineer's judgment; the certificate is its record."}
   {:role "sales-and-use-tax-report" :title "North Carolina Sales and Use Tax Report" :exhibit "E"
    :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE_PER_MONTH" :phase "CONSTRUCTION" :required false
    :refers-to ["pay-application"]
@@ -127,18 +129,20 @@
  :milestones
  [{:name "Bid opening" :phase "BID" :when "The bid opening date and time in the Invitation to Bid" :references ["gs-143-129"]}
   {:name "Award" :phase "AWARD" :when "The Town Council's award; at least three bids received, or re-advertised" :references ["gs-143-132"]}
+  {:name "Contract documents due" :phase "AWARD" :when "Within the response days (14) after the Notice of Award"}
   {:name "Notice to Proceed" :phase "CONSTRUCTION" :when "The Commence Date named in the Notice to Proceed (Exhibit J)"}
-  {:name "Completion Date" :phase "CONSTRUCTION" :when "The completion days after the Notice to Proceed; liquidated damages may be assessed after it (GC 22)"}
+  {:name "Completion Date" :phase "CONSTRUCTION" :when "The completion days after the Commence Date; liquidated damages may be assessed after it (GC 22)"}
   {:name "Final acceptance" :phase "CLOSEOUT" :when "Within the final-acceptance period after the Contractor's notice of completion"}
   {:name "Release of retainage" :phase "CLOSEOUT" :when "Within sixty (60) days after the final pay request, with the surety's written consent (Sec. 6)" :references ["gs-143-134-1"]}
   {:name "End of warranty" :phase "CLOSEOUT" :when "One year after written final acceptance (Sec. 9(a))"}]
 
  :references
- [{:id "gs-143-129" :citation "N.C. Gen. Stat. § 143-129" :kind "STATUTE" :subject "Formal bidding at $500,000 or more; advertisement; bid security of 5%; rejection and waiver"}
+ [{:id "gs-143-129" :citation "N.C. Gen. Stat. § 143-129" :kind "STATUTE" :subject "Formal bidding at $500,000 or more; advertisement; bid security of 5%; rejection and waiver; bonds"}
   {:id "gs-143-132" :citation "N.C. Gen. Stat. § 143-132" :kind "STATUTE" :subject "At least three competitive bids, or re-advertisement"}
   {:id "gs-143-128" :citation "N.C. Gen. Stat. § 143-128(f1)" :kind "STATUTE" :subject "Dispute resolution (Sec. 17)"}
   {:id "gs-143-134-1" :citation "N.C. Gen. Stat. § 143-134.1" :kind "STATUTE" :subject "Retainage, prompt payment and final payment"}
-  {:id "gs-44a-26" :citation "N.C. Gen. Stat. § 44A-26" :kind "STATUTE" :subject "Performance and payment bonds of 100% of the contract price"}
+  {:id "gs-44a-26" :citation "N.C. Gen. Stat. § 44A-26 (Article 3 of Chapter 44A)" :kind "STATUTE" :subject "Performance and payment bonds of 100% of the contract price"}
+  {:id "gs-44a-27" :citation "N.C. Gen. Stat. §§ 44A-27, 44A-28" :kind "STATUTE" :subject "Payment bond claimants: notice and time limits"}
   {:id "gs-159-28" :citation "N.C. Gen. Stat. § 159-28" :kind "STATUTE" :subject "The Finance Officer's pre-audit certificate; appropriation of funds"}
   {:id "gs-160a-485" :citation "N.C. Gen. Stat. § 160A-485" :kind "STATUTE" :subject "Governmental immunity, waived only to the extent of insurance"}
   {:id "gs-64-26" :citation "N.C. Gen. Stat. §§ 64-25, 64-26" :kind "STATUTE" :subject "E-Verify"}
@@ -152,7 +156,8 @@
   {:id "gs-87-115" :citation "N.C. Gen. Stat. § 87-115 et seq." :kind "STATUTE" :subject "Underground utility safety and damage prevention"}
   {:id "gs-136-41-1" :citation "N.C. Gen. Stat. § 136-41.1 et seq." :kind "STATUTE" :subject "Powell Bill street aid: the Town's street system"}
   {:id "gs-132-1-2" :citation "N.C. Gen. Stat. § 132-1.2" :kind "STATUTE" :subject "Trade secrets in bids (SC-15)"}
-  {:id "ncdot-standard-specifications" :citation "NCDOT Standard Specifications for Roads and Structures (latest edition)" :kind "STANDARD" :subject "Governs the work, with the NCDOT Roadway Standard Drawings"}
+  {:id "ncdot-standard-specifications" :citation "NCDOT Standard Specifications for Roads and Structures, and Roadway Standard Drawings (latest editions)" :kind "STANDARD"
+   :subject "Govern the work. Definitions as in Section 101 of the Standard Specifications, with NCDOT and its Divisions read as the Town and its comparable departments (Exhibit G). The Contractor keeps a copy of each; conformance is the Engineer's to verify."}
   {:id "mutcd" :citation "Manual on Uniform Traffic Control Devices, with the NC Supplement" :kind "STANDARD" :subject "Traffic control and markings"}]
 
  :intake
@@ -182,4 +187,44 @@
             "financeOfficerSignature" "preAuditDate"]}
   {:title "Notice to Proceed" :phase "CONSTRUCTION"
    :fields ["noticeToProceedDate"]
-   :note "From the Notice to Proceed (Exhibit J); the Completion Date counts from it."}]}
+   :note "The Commence Date from the Notice to Proceed (Exhibit J), which pay requests read from the terms."}]
+
+ :guides
+ [{:topic "Bidding and award"
+   :summary "Article 8 of Chapter 143 governs how the contract was let: formal bidding at $500,000 or more, advertisement, bid security, the three-bid rule, award to the lowest responsible, responsive bidder, and rejection or waiver of informalities."
+   :references ["gs-143-129" "gs-143-132" "gs-133-27"]
+   :where "Invitation to Bid; SC-1 to SC-4; the Bid Form (Exhibit G); the Notice of Award (Exhibit I)"
+   :prompts ["Was the Invitation to Bid advertised at least seven full days before the bid opening, in print and on the Town's website?"
+             "Were at least three bids received, or was the solicitation re-advertised?"
+             "Did the successful bid carry bid security of five percent (5%) of the total bid, as a bond or a deposit?"
+             "Is the successful bidder licensed in the right classification and limitation, and absent from the debarment list?"
+             "On what date did the Town Council award the contract, and when does the Notice of Award's response period end?"]}
+  {:topic "Bonds"
+   :summary "Article 3 of Chapter 44A requires a performance bond and a payment bond, each of one hundred percent (100%) of the contract price, from a surety authorized in North Carolina, on the Town's forms."
+   :references ["gs-44a-26" "gs-44a-27" "gs-143-129"]
+   :where "Exhibit F; the Invitation to Bid, Bid Security and Bonds; SC-9"
+   :prompts ["Is each bond's penal sum at least one hundred percent (100%) of the contract price, including approved change orders?"
+             "Is the surety authorized to do business in North Carolina, and is the Attorney-in-Fact's power of attorney attached?"
+             "Is each bond countersigned by a North Carolina licensed resident agent?"
+             "Do the bonds name the right contract, principal and obligee?"
+             "Has any claimant given notice on the payment bond (G.S. 44A-27), and is the time to sue running (G.S. 44A-28)?"]}
+  {:topic "Payment and retainage"
+   :summary "Monthly pay requests are verified, inspected, approved and paid within thirty (30) days of approval; retainage follows G.S. 143-134.1."
+   :references ["gs-143-134-1" "gs-159-28"]
+   :where "Sec. 4a and Sec. 6; GC 16-18; SC-16; Exhibit E"
+   :prompts ["What has been paid to date, and how much retainage is held?"
+             "Is the project fifty percent (50%) complete, so that retainage may stop with the surety's consent?"
+             "Was each paid quantity approved in an Inspection Certificate?"
+             "Is any approved payment past thirty (30) days?"]}
+  {:topic "Standards of the work"
+   :summary "The NCDOT Standard Specifications and Roadway Standard Drawings govern the work; whether it conforms is the Engineer's judgment, recorded in the Inspection Certificates. Trustblocks does not check conformance."
+   :references ["ncdot-standard-specifications" "mutcd"]
+   :where "Invitation to Bid, Standard Specifications; Exhibit G; SC-10 to SC-12"
+   :prompts ["Which Standard Specifications sections govern this pay item?"
+             "Which Inspection Certificate approved this quantity, and what tests did it rely on?"]}
+  {:topic "Contractor certifications"
+   :summary "The Contractor certifies E-Verify compliance, that it is not on the Iran divestment or Israel boycott lists, and that no gift or conflict of interest taints the contract."
+   :references ["gs-64-26" "gs-143-133-3" "gs-147-86-58" "gs-147-86-81" "gs-133-32" "gs-14-234"]
+   :where "Exhibit B"
+   :prompts ["When did the Finance Director certify receipt of the Exhibit B affidavit?"
+             "Does any subcontractor also need an E-Verify affidavit?"]}]}

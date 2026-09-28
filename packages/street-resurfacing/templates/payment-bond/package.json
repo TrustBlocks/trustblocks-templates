@@ -1,0 +1,10 @@
+{
+    "name": "street-resurfacing-payment-bond",
+    "version": "0.1.0",
+    "description": "The Payment Bond -- Exhibit \"F\" of the STR-27 bid package, on the Town's form,",
+    "accordproject": {
+        "runtime": "typescript",
+        "template": "contract",
+        "cicero": "^2.0.0"
+    }
+}

@@ -52,49 +52,66 @@ that resolve; and every terms field a document reads or the intake form asks
 for, declared in the terms model. `bb conformance` has Concerto validate
 `manifest.json`.
 
-## STR-27, as drafted
+## Guides
 
-| Phase | Document | Exhibit | Treatment | Supplied by | How many | Kept as data |
+`guides` point past the documents: for a topic -- bidding and award, bonds,
+payment and retainage, the standards of the work, contractor certifications
+-- the law that governs it, where it lives in the package, and the questions
+worth asking. Guidance, not rules: nothing checks or acts on it. It is what
+a person, an MCP client or an agent reads to know where to dig. For STR-27,
+conformance with the NCDOT Standard Specifications is the Engineer's to
+verify; the guide says so, and points at the Inspection Certificates.
+
+## STR-27
+
+With the Town Attorney's decisions of September 2026:
+
+| Phase | Document | Exhibit | Treatment | Supplied by | How many | Received by |
 |---|---|---|---|---|---|---|
 | BID | Invitation to Bid | | stored | Town | one | |
-| BID | Bid security (bid bond or deposit) | F | stored | surety | one | form, amount (5%), surety |
+| BID | **Bid Bond** (or a deposit, stored) | F | **template** | surety | one | |
 | BID | Debarred Firms Certification | G | stored | Contractor | one | |
-| AWARD | Notice of Award | I | stored | Town | one | Council action date |
-| AWARD | **Contract** -- Sec. 1-18, Exhibits A, G (with the Bid Form), H, Attachment 1 | | **terms** | Town | one | (the terms) |
-| AWARD | Performance Bond | F | stored | surety | one | surety, bond number, penal sum (100%), date |
-| AWARD | Payment Bond | F | stored | surety | one | surety, bond number, penal sum (100%), date |
-| AWARD | Certificate of Insurance | D | stored | insurer | any (renewals) | insurer, **expiration date (a deadline)** |
-| AWARD | E-Verify Affidavit and Certifications | B | stored | Contractor | one | |
-| AWARD | Tax Forms (W-9) | C | stored | Contractor | one | |
-| AWARD | Vendor Information Form | E | stored | Contractor | one per payee | vendor number, payment terms, remit-to |
-| CONSTRUCTION | Notice to Proceed | J | stored | Town | one | Notice to Proceed date |
-| CONSTRUCTION | **Contractor Pay Request** | E | **template** | Contractor | one a month | (its own data, lifecycle, clause) |
-| CONSTRUCTION | Inspection Certificate | | stored | Engineer | one a month | date inspected |
+| AWARD | **Notice of Award and Acceptance of Notice** -- documents due in 14 days | I | **template** | Town | one | |
+| AWARD | **Contract** -- Sec. 1-18, Exhibits A, G (with the Bid Form), H, Attachment 1 | | **terms** | Town | one | |
+| AWARD | **Performance Bond**, **Payment Bond** | F | **template** | surety | one each | TOWN: who? |
+| AWARD | Certificate of Insurance | D | stored, received only | insurer | any (renewals) | Finance Director |
+| AWARD | E-Verify Affidavit and Certifications | B | stored, received only | Contractor | one | Finance Director |
+| AWARD | IRS Form W-9 | C | stored, received only | Contractor | one per payee | Finance Director |
+| AWARD | **Vendor Information Form** -- received, then vendor number assigned | E | **template, with a lifecycle** | Contractor | one per payee | Finance Director |
+| CONSTRUCTION | **Notice to Proceed** -- the Completion Date counts from it | J | **template** | Town | one | |
+| CONSTRUCTION | **Contractor Pay Request** -- its payment certificate names the payee's vendor number and terms | E | **template** | Contractor | one a month | Zoning Administrator (designee) |
+| CONSTRUCTION | Inspection Certificate | | stored | Engineer | one a month | Zoning Administrator (designee) |
 | CONSTRUCTION | Sales and Use Tax Report | E | stored | Contractor | one a month | |
-| CONSTRUCTION | Change Order | | stored | Town | any | amount, days |
+| CONSTRUCTION | Change Order | | stored, amount and days kept | Town | any | |
 | CLOSEOUT | Notice of completion | | stored | Contractor | one | |
-| CLOSEOUT | Certificate of Final Acceptance | | stored | Town | one | accepted date |
+| CLOSEOUT | Certificate of Final Acceptance | | stored, accepted date kept | Town | one | |
 
-## For the Town to decide
+The Town's forms are modelled -- every blank a field -- and the forms of
+others (the insurer's certificate, the IRS's W-9) are received, not modelled.
 
-1. **The vendor form** -- one per payee, normally only the Contractor, or
-   also subcontractors or suppliers the Town pays directly?
-2. **What is required when.** The draft requires the E-Verify affidavit, W-9
-   and vendor form at award; the package does not say whether any come with
-   the bid. The bid security is required at bid and irrelevant after award.
-3. **Which stored documents become templates.** The Notices of Award and to
-   Proceed are the first candidates: the Town issues them, so their data can
-   be ours from the start, and the Completion Date should count from the
-   signed Notice to Proceed rather than a date typed into the contract.
-4. **The facts kept from each stored document** -- enough to answer the
-   questions the Town actually asks, and no more.
-5. **Legal references.** Twenty cited by the package are listed. STR-27 cites
-   no ordinance; a subdivision or development agreement would cite the UDO,
-   and those citations would resolve to the ordinance text in force on the
-   date that matters (G.S. 160D-108).
+## Reading forms filled in by others
+
+A vendor form or bond comes back from a third party. Accord's current engine
+drafts documents from data but no longer parses a filled-in document back
+into data (older Cicero did). Until it does, the data reaches the matter one
+of three ways: the Town enters it from the received file into the form the
+model generates, with the Finance Director's receipt certifying the file;
+the third party fills the form itself, through a link, so the data arrives
+already structured; or an agent reads the file and proposes the values for a
+person to confirm.
+
+## Still for the Town
+
+1. **Bonds** -- who receives and approves them (the Town Attorney, as to
+   form?), which becomes the bonds' receiving authority and lifecycle.
+2. **Bid security** -- whether a deposit needs more than a receipt.
+3. **The Notice to Proceed and the terms** -- pay requests read the Commence
+   Date from the terms; the Notice now carries it too, and should be the
+   source once matters are opened from the manifest.
 
 ## Next
 
 The matter page made from the manifest: what is received and what is
-missing, the timeline, deadlines, notes, references, and an EDN/JSON switch.
-Then the intake form, generated from `intake` and the terms model.
+missing, the timeline, deadlines, notes, references and guides, and an
+EDN/JSON switch. Then the intake form, generated from `intake` and the terms
+model.

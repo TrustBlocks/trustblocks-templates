@@ -16,7 +16,8 @@
 (def ^:private nested
   "Which concept each array holds, by the property it sits under."
   {:phases :Phase :documents :DocumentRole :fields :StoredField
-   :milestones :Milestone :references :LegalReference :intake :IntakeSection})
+   :milestones :Milestone :references :LegalReference :intake :IntakeSection
+   :guides :Guide})
 
 (defn- camel [k]
   (let [[head & tail] (str/split (name k) #"-")]

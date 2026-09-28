@@ -27,6 +27,8 @@ concept Manifest {
   o Milestone[] milestones
   o LegalReference[] references
   o IntakeSection[] intake
+  @description("Where to look, and what to ask, when a question goes deeper than the documents -- for a person, an MCP client or an agent")
+  o Guide[] guides optional
 }
 
 /** A stage of the matter, in order: bid, award, construction, closeout. */
@@ -129,4 +131,22 @@ concept IntakeSection {
   o String phase
   o String[] fields
   o String note optional
+}
+
+/**
+ * A topic to interrogate when a question goes deeper than the matter's own
+ * documents: the law and standards that govern it, where it lives in the
+ * package, and the questions worth asking. Guidance, not rules -- nothing
+ * checks or acts on it; it points a person, an MCP client or an agent at
+ * the right material.
+ */
+concept Guide {
+  o String topic
+  o String summary
+  @description("Ids of the legal references")
+  o String[] references optional
+  @description("Where it lives in the package, e.g. Exhibit F; Sec. 6")
+  o String where optional
+  @description("Questions worth asking about it")
+  o String[] prompts
 }
