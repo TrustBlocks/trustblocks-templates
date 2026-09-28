@@ -1,0 +1,54 @@
+# Every push and pull request: the templates checked and drafted through
+# Accord's engine, and the clause runtime tested on the JVM and under Node,
+# with trustblocks-logic.js built and kept as an artifact.
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: DeLaGuardo/setup-clojure@13.2
+        with:
+          bb: latest
+      - run: bb check
+      - run: npm ci --no-audit --no-fund
+      - run: bb conformance
+
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: DeLaGuardo/setup-clojure@13.2
+        with:
+          cli: latest
+          bb: latest
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: deps-${{ hashFiles('deps.edn') }}
+      - run: bb runtime-test
+      - run: bb cljs-test
+      - run: bb logic-bundle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trustblocks-logic
+          path: target/trustblocks-logic.js

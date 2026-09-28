@@ -3,3 +3,5 @@ dist/
 .cpcache/
 .clj-kondo/.cache/
 .DS_Store
+target/
+.shadow-cljs/
