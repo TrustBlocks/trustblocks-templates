@@ -1,0 +1,185 @@
+;; The street-resurfacing package's manifest: what a matter made from it
+;; consists of, and how the pieces fit. Typed by
+;; com.trustblocks.manifest@1.0.0.Manifest (shared/model/manifest.cto);
+;; `bb build` writes the same thing as manifest.json.
+;;
+;; DRAFT for the Town Attorney's review, derived from the STR-27 bid package
+;; (sources/). Marked ";; TOWN:" where the Town decides.
+{:package "street-resurfacing"
+ :title   "Street Resurfacing (unit-price construction, formally bid)"
+ :summary "A formally bid, unit-price street resurfacing contract and every instrument around it: bid security, bonds, certificates, notices, the monthly pay requests with their inspection certificates, and closeout. Derived from the Town of China Grove's STR-27 bid package."
+ :terms   "contract"
+
+ :phases
+ [{:name "BID"
+   :description "Advertised and bid: the Invitation to Bid, the Bid Form with unit prices, and bid security."}
+  {:name "AWARD"
+   :description "Awarded by the Town Council and executed: bonds, insurance, certifications, vendor setup, the Finance Officer's pre-audit."}
+  {:name "CONSTRUCTION"
+   :description "From the Notice to Proceed: monthly pay requests, each inspected and certified, approved and paid."}
+  {:name "CLOSEOUT"
+   :description "Completion, final acceptance, final payment, release of retainage, the warranty year."}]
+
+ :documents
+ [;; ---- BID
+  {:role "invitation-to-bid" :title "Invitation to Bid"
+   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "BID" :required true
+   :references ["gs-143-129" "gs-143-132"]
+   :note "An overview of the solicitation; it binds no one once the contract is awarded."}
+  {:role "bid-security" :title "Bid security (bid bond or deposit)" :exhibit "F"
+   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "BID" :required true
+   :fields [{:name "form" :type "String" :description "Bid bond, cash, certified or cashier's check"}
+            {:name "amount" :type "Double" :description "Five percent (5%) of the total bid"}
+            {:name "surety" :type "String"}]
+   :references ["gs-143-129"]
+   :note "Returned to unsuccessful bidders; the successful bidder's is held until the contract bonds are delivered."}
+  {:role "debarment-certification" :title "Debarred Firms Certification" :exhibit "G"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "BID" :required true
+   :references ["gs-133-27"]}
+
+  ;; ---- AWARD
+  {:role "notice-of-award" :title "Notice of Award" :exhibit "I"
+   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "AWARD" :required true
+   :fields [{:name "councilActionDate" :type "DateTime" :description "The Town Council's award"}]
+   :references ["gs-143-129"]
+   :note "Planned as a modelled document: the Town issues it, so its data can be ours from the start."}
+  {:role "contract" :title "Standard Form Construction Contract, with Exhibits A, G and H and Attachment 1"
+   :treatment "TERMS" :template "contract" :supplied-by "TOWN" :count "ONE" :phase "AWARD" :required true
+   :references ["gs-143-129" "gs-143-134-1" "gs-143-128" "gs-160a-485" "gs-159-28" "ncdot-standard-specifications" "mutcd"]
+   :note "The terms: Sec. 1-18, Scope and Fee (A), General Conditions and the Bid Form with the successful bidder's unit prices (G), Special Provisions (H), the Street Schedule. Its signature page carries the Finance Officer's pre-audit certificate (G.S. 159-28)."}
+  {:role "performance-bond" :title "Performance Bond" :exhibit "F"
+   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
+   :fields [{:name "surety" :type "String"}
+            {:name "bondNumber" :type "String"}
+            {:name "penalSum" :type "Double" :description "One hundred percent (100%) of the contract price"}
+            {:name "dated" :type "DateTime"}]
+   :refers-to ["contract"]
+   :references ["gs-44a-26"]
+   :note "Could become a modelled document if the Town wants the bond's terms as data, not only these facts."}
+  {:role "payment-bond" :title "Payment Bond" :exhibit "F"
+   :treatment "STORED" :supplied-by "SURETY" :count "ONE" :phase "AWARD" :required true
+   :fields [{:name "surety" :type "String"}
+            {:name "bondNumber" :type "String"}
+            {:name "penalSum" :type "Double" :description "One hundred percent (100%) of the contract price"}
+            {:name "dated" :type "DateTime"}]
+   :refers-to ["contract"]
+   :references ["gs-44a-26"]}
+  {:role "certificate-of-insurance" :title "Certificate of Insurance" :exhibit "D"
+   :treatment "STORED" :supplied-by "INSURER" :count "ANY" :phase "AWARD" :required true
+   :fields [{:name "insurer" :type "String"}
+            {:name "expirationDate" :type "DateTime" :deadline true
+             :description "Coverage must not lapse while work continues"}]
+   :note "The Town named as additional insured on every line but workers' compensation. Renewed certificates replace expiring ones -- hence ANY."}
+  {:role "e-verify-and-certifications" :title "E-Verify Affidavit and Certifications" :exhibit "B"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "AWARD" :required true
+   :references ["gs-64-26" "gs-143-133-3" "gs-147-86-58" "gs-147-86-81" "gs-133-32" "gs-14-234"]
+   :note "E-Verify, Iran Divestment, companies boycotting Israel, gift ban, conflict of interest."}
+  {:role "tax-forms" :title "Tax Forms (W-9)" :exhibit "C"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "AWARD" :required true}
+  {:role "vendor-form" :title "Vendor Information Form" :exhibit "E"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE_PER_PAYEE" :phase "AWARD" :required true
+   :fields [{:name "vendorNumber" :type "String" :description "Assigned by Town Finance"}
+            {:name "paymentTerms" :type "String"}
+            {:name "remitTo" :type "String"}]
+   :note "Sets the payee up in the Town's financial system. The payment certificate on each pay request names the vendor number and terms. TOWN: one per payee -- normally only the Contractor -- or also subcontractors or suppliers the Town pays directly?"}
+
+  ;; ---- CONSTRUCTION
+  {:role "notice-to-proceed" :title "Notice to Proceed" :exhibit "J"
+   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "CONSTRUCTION" :required true
+   :fields [{:name "noticeToProceedDate" :type "DateTime" :description "The Commence Date; the Completion Date counts from it"}]
+   :note "Planned as a modelled document whose date the terms' Completion Date counts from."}
+  {:role "pay-application" :title "Contractor Pay Request" :exhibit "E"
+   :treatment "TEMPLATE" :template "pay-application" :supplied-by "CONTRACTOR" :count "ONE_PER_MONTH"
+   :phase "CONSTRUCTION" :required true :received-under "RECEIVE_PAY_APPLICATIONS"
+   :reads-terms ["contractNumber" "contractorName" "noticeToProceedDate" "completionDays"
+                 "inspectionPeriodDays" "liquidatedDamagesPerDay" "resurfacingItems" "millingItems"]
+   :refers-to ["contract" "inspection-certificate" "vendor-form"]
+   :references ["gs-143-134-1"]
+   :note "Due by the 25th of each month (Sec. 6). Its lifecycle and clause are in the template."}
+  {:role "inspection-certificate" :title "Inspection Certificate"
+   :treatment "STORED" :supplied-by "ENGINEER" :count "ONE_PER_MONTH" :phase "CONSTRUCTION" :required true
+   :received-under "RECEIVE_INSPECTION_REPORTS"
+   :fields [{:name "inspectedOn" :type "DateTime"}]
+   :refers-to ["pay-application"]
+   :note "Defined in GC 1 and required by GC 18(b), per the Town Attorney's revisions: within the inspection period after each pay request."}
+  {:role "sales-and-use-tax-report" :title "North Carolina Sales and Use Tax Report" :exhibit "E"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE_PER_MONTH" :phase "CONSTRUCTION" :required false
+   :refers-to ["pay-application"]
+   :references ["gs-105-164-14"]
+   :note "Lists the Contractor's own suppliers and the tax paid; supports the Town's refund claim. Failure to submit may delay final payment."}
+  {:role "change-order" :title "Change Order"
+   :treatment "STORED" :supplied-by "TOWN" :count "ANY" :phase "CONSTRUCTION" :required false
+   :fields [{:name "amount" :type "Double" :description "Change in the contract amount"}
+            {:name "days" :type "Integer" :description "Change in the completion days"}]
+   :refers-to ["contract"]
+   :note "Signed by both parties (Sec. 2). May move the verification tier (SC-16)."}
+
+  ;; ---- CLOSEOUT
+  {:role "notice-of-completion" :title "Contractor's written notice that the Work is complete"
+   :treatment "STORED" :supplied-by "CONTRACTOR" :count "ONE" :phase "CLOSEOUT" :required true
+   :note "Starts the final-acceptance period (GC 1, Certificate of Final Acceptance)."}
+  {:role "certificate-of-final-acceptance" :title "Certificate of Final Acceptance"
+   :treatment "STORED" :supplied-by "TOWN" :count "ONE" :phase "CLOSEOUT" :required true
+   :fields [{:name "acceptedDate" :type "DateTime" :description "The warranty year runs from it"}]
+   :refers-to ["notice-of-completion"]
+   :note "Signed by the Director and the Town Manager (GC 1, per the Town Attorney's revisions)."}]
+
+ :milestones
+ [{:name "Bid opening" :phase "BID" :when "The bid opening date and time in the Invitation to Bid" :references ["gs-143-129"]}
+  {:name "Award" :phase "AWARD" :when "The Town Council's award; at least three bids received, or re-advertised" :references ["gs-143-132"]}
+  {:name "Notice to Proceed" :phase "CONSTRUCTION" :when "The Commence Date named in the Notice to Proceed (Exhibit J)"}
+  {:name "Completion Date" :phase "CONSTRUCTION" :when "The completion days after the Notice to Proceed; liquidated damages may be assessed after it (GC 22)"}
+  {:name "Final acceptance" :phase "CLOSEOUT" :when "Within the final-acceptance period after the Contractor's notice of completion"}
+  {:name "Release of retainage" :phase "CLOSEOUT" :when "Within sixty (60) days after the final pay request, with the surety's written consent (Sec. 6)" :references ["gs-143-134-1"]}
+  {:name "End of warranty" :phase "CLOSEOUT" :when "One year after written final acceptance (Sec. 9(a))"}]
+
+ :references
+ [{:id "gs-143-129" :citation "N.C. Gen. Stat. § 143-129" :kind "STATUTE" :subject "Formal bidding at $500,000 or more; advertisement; bid security of 5%; rejection and waiver"}
+  {:id "gs-143-132" :citation "N.C. Gen. Stat. § 143-132" :kind "STATUTE" :subject "At least three competitive bids, or re-advertisement"}
+  {:id "gs-143-128" :citation "N.C. Gen. Stat. § 143-128(f1)" :kind "STATUTE" :subject "Dispute resolution (Sec. 17)"}
+  {:id "gs-143-134-1" :citation "N.C. Gen. Stat. § 143-134.1" :kind "STATUTE" :subject "Retainage, prompt payment and final payment"}
+  {:id "gs-44a-26" :citation "N.C. Gen. Stat. § 44A-26" :kind "STATUTE" :subject "Performance and payment bonds of 100% of the contract price"}
+  {:id "gs-159-28" :citation "N.C. Gen. Stat. § 159-28" :kind "STATUTE" :subject "The Finance Officer's pre-audit certificate; appropriation of funds"}
+  {:id "gs-160a-485" :citation "N.C. Gen. Stat. § 160A-485" :kind "STATUTE" :subject "Governmental immunity, waived only to the extent of insurance"}
+  {:id "gs-64-26" :citation "N.C. Gen. Stat. §§ 64-25, 64-26" :kind "STATUTE" :subject "E-Verify"}
+  {:id "gs-143-133-3" :citation "N.C. Gen. Stat. § 143-133.3" :kind "STATUTE" :subject "E-Verify by contractors and subcontractors on Town contracts"}
+  {:id "gs-147-86-58" :citation "N.C. Gen. Stat. §§ 147-86.55, 147-86.58" :kind "STATUTE" :subject "Iran Divestment Act certification"}
+  {:id "gs-147-86-81" :citation "N.C. Gen. Stat. § 147-86.81" :kind "STATUTE" :subject "Companies boycotting Israel"}
+  {:id "gs-133-32" :citation "N.C. Gen. Stat. § 133-32" :kind "STATUTE" :subject "Gifts to public officials"}
+  {:id "gs-14-234" :citation "N.C. Gen. Stat. § 14-234" :kind "STATUTE" :subject "Public officers benefiting from public contracts"}
+  {:id "gs-133-27" :citation "N.C. Gen. Stat. § 133-27" :kind "STATUTE" :subject "Suspended or debarred contractors"}
+  {:id "gs-105-164-14" :citation "N.C. Gen. Stat. § 105-164.14(c)" :kind "STATUTE" :subject "The Town's refund of local sales and use taxes"}
+  {:id "gs-87-115" :citation "N.C. Gen. Stat. § 87-115 et seq." :kind "STATUTE" :subject "Underground utility safety and damage prevention"}
+  {:id "gs-136-41-1" :citation "N.C. Gen. Stat. § 136-41.1 et seq." :kind "STATUTE" :subject "Powell Bill street aid: the Town's street system"}
+  {:id "gs-132-1-2" :citation "N.C. Gen. Stat. § 132-1.2" :kind "STATUTE" :subject "Trade secrets in bids (SC-15)"}
+  {:id "ncdot-standard-specifications" :citation "NCDOT Standard Specifications for Roads and Structures (latest edition)" :kind "STANDARD" :subject "Governs the work, with the NCDOT Roadway Standard Drawings"}
+  {:id "mutcd" :citation "Manual on Uniform Traffic Control Devices, with the NC Supplement" :kind "STANDARD" :subject "Traffic control and markings"}]
+
+ :intake
+ [{:title "Before advertising" :phase "BID"
+   :fields ["contractNumber" "budgetOrdinanceFiscalYear" "bidOpeningDate"
+            "completionDays" "completionDaysWritten"
+            "liquidatedDamagesPerDay" "liquidatedDamagesPerDayWritten"
+            "asphaltBinderBaseIndexPerTon" "asphaltBinderBaseIndexDate"
+            "inspectionPeriodDays" "inspectionPeriodDaysWritten"
+            "finalAcceptancePeriodDays" "finalAcceptancePeriodDaysWritten"
+            "verificationTier" "verificationRequirement" "verifiers"
+            "managerName" "managerCredentials" "publicWorksDirectorName" "clerkName"
+            "streets"]
+   :note "The Town's own terms: what every bidder bids against. The pay items' estimated quantities are set here too."}
+  {:title "From the successful bid" :phase "AWARD"
+   :fields ["contractorName" "contractorEntityType" "contractorStateOfOrganization" "contractorNoticeAddress"
+            "addenda" "crackAndJointSealingItems" "patchingLevelingSealCoatItems" "millingItems"
+            "reclamationItems" "resurfacingItems" "concreteItems" "pavementMarkingItems"
+            "crackAndJointSealingTotal" "patchingLevelingSealCoatTotal" "millingTotal"
+            "reclamationTotal" "resurfacingTotal" "concreteTotal" "pavementMarkingTotal"
+            "totalBid" "totalBidWritten"]
+   :note "The bidder's unit prices, extended amounts and totals, as written on the Bid Form."}
+  {:title "Execution" :phase "AWARD"
+   :fields ["managerSignature" "managerSignedDate" "clerkAttestation" "townAttorneyApproval"
+            "contractorSignature" "contractorSignatoryName" "contractorSignatoryTitle" "contractorSignedDate"
+            "contractorAttestation" "contractorAttestName" "contractorAttestTitle"
+            "financeOfficerSignature" "preAuditDate"]}
+  {:title "Notice to Proceed" :phase "CONSTRUCTION"
+   :fields ["noticeToProceedDate"]
+   :note "From the Notice to Proceed (Exhibit J); the Completion Date counts from it."}]}

@@ -9,7 +9,8 @@
   (:require [babashka.fs :as fs]
             [cheshire.core :as json]
             [clojure.java.io :as io]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [manifest])
   (:import [java.io PushbackReader]
            [java.util.zip ZipEntry ZipOutputStream]))
 
@@ -325,10 +326,18 @@
     (str (label dir) ": model/" (fs/file-name shared)
          " differs from shared/model/" (fs/file-name shared))))
 
+(defn- packages
+  "Every package directory under packages/."
+  []
+  (when (fs/exists? "packages")
+    (sort-by str (filter fs/directory? (fs/list-dir "packages")))))
+
 (defn check []
-  (let [results (for [dir (templates)] [(label dir) (problems dir)])
+  (let [results (concat (for [dir (templates)] [(label dir) (problems dir)])
+                        (for [dir (packages)] [(str (fs/file-name dir) " (manifest)") (manifest/problems dir)]))
         shared  (shared-copy-problems)]
-    (println (str "Checking " (count results) " template(s) under templates/ and packages/"))
+    (println (str "Checking " (count (templates)) " template(s) and " (count (packages))
+                  " package manifest(s) under templates/ and packages/"))
     (doseq [[name ps] results]
       (if (empty? ps)
         (println "  ok   " name)
@@ -358,4 +367,17 @@
           (.putNextEntry zip (ZipEntry. (str (fs/relativize dir f))))
           (io/copy (fs/file f) zip)
           (.closeEntry zip)))
-      (println (str "  " out "  (" (count files) " files, " (fs/size out) " bytes)")))))
+      (println (str "  " out "  (" (count files) " files, " (fs/size out) " bytes)"))))
+  ;; Each package, as a directory: its manifest, in EDN and in Concerto JSON,
+  ;; and its templates' archives.
+  (doseq [pkg (packages)]
+    (let [out (fs/path "dist" (str (fs/file-name pkg)))]
+      (fs/create-dirs out)
+      (fs/copy (fs/path pkg "manifest.edn") (fs/path out "manifest.edn") {:replace-existing true})
+      (spit (str (fs/path out "manifest.json"))
+            (json/generate-string (manifest/->concerto (manifest/read-manifest (fs/path pkg "manifest.edn")))
+                                  {:pretty true}))
+      (doseq [dir (templates) :when (str/starts-with? (str dir) (str pkg))]
+        (fs/copy (fs/file "dist" (archive-name dir)) (fs/path out (archive-name dir)) {:replace-existing true}))
+      (println (str "  " out "/  (manifest.edn, manifest.json, "
+                    (count (filter #(str/starts-with? (str %) (str pkg)) (templates))) " archives)")))))

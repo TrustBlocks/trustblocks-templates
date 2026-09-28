@@ -1,0 +1,132 @@
+namespace com.trustblocks.manifest@1.0.0
+
+/**
+ * A package's manifest: what a matter made from it consists of, and how
+ * the pieces fit -- the documents, who supplies each and when, what each
+ * draws from the terms and refers to, the milestones, the law it rests on,
+ * and the information the Town gathers to open one.
+ *
+ * A formally bid Town project is several instruments, not one contract:
+ * the terms, and around them bonds, certificates, notices, forms filled
+ * once or monthly. The manifest says which are which, so the matter can
+ * show what has been received and what is missing, and the intake form can
+ * ask for exactly what the documents need.
+ *
+ * Authored as manifest.edn in the package (kebab-case keys, no $class --
+ * each part's type follows from where it sits) and built to manifest.json
+ * in this model's own terms.
+ */
+concept Manifest {
+  o String package
+  o String title
+  o String summary
+  @description("The role of the document whose data every other document shares")
+  o String terms
+  o Phase[] phases
+  o DocumentRole[] documents
+  o Milestone[] milestones
+  o LegalReference[] references
+  o IntakeSection[] intake
+}
+
+/** A stage of the matter, in order: bid, award, construction, closeout. */
+concept Phase {
+  o String name
+  o String description
+}
+
+/** One kind of document in the matter. */
+concept DocumentRole {
+  o String role
+  o String title
+  @description("The exhibit it appears as in the package, e.g. E")
+  o String exhibit optional
+  o Treatment treatment
+  @description("The package template, for TERMS and TEMPLATE")
+  o String template optional
+  o Party suppliedBy
+  o Count count
+  @description("The phase in which it is due")
+  o String phase
+  o Boolean required
+  @description("The authority an officeholder needs to receive or certify it")
+  o String receivedUnder optional
+  @description("Terms properties it draws on")
+  o String[] readsTerms optional
+  @description("Roles of other documents it refers to")
+  o String[] refersTo optional
+  @description("For a stored document: the few facts worth keeping as data")
+  o StoredField[] fields optional
+  @description("Ids of the legal references it rests on")
+  o String[] references optional
+  o String note optional
+}
+
+enum Treatment {
+  @description("The terms: one template whose data the matter's documents share")
+  o TERMS
+  @description("A modelled document: its own template, data and, perhaps, lifecycle")
+  o TEMPLATE
+  @description("A stored file with a receipt, and perhaps a few fields")
+  o STORED
+}
+
+enum Party {
+  o TOWN
+  o CONTRACTOR
+  o SURETY
+  o INSURER
+  o ENGINEER
+}
+
+enum Count {
+  o ONE
+  o ONE_PER_MONTH
+  o ONE_PER_PAYEE
+  o ANY
+}
+
+/** A fact kept as data from a stored document -- a bond's penal sum, a certificate's expiration date. */
+concept StoredField {
+  o String name
+  @description("String, Double, Integer, Boolean or DateTime")
+  o String type
+  o String description optional
+  @description("A DateTime to watch as a deadline")
+  o Boolean deadline optional
+}
+
+/** A point in the matter's life, for a matter whose documents do not date it themselves. */
+concept Milestone {
+  o String name
+  o String phase
+  @description("When it falls, in the contract's own terms")
+  o String when
+  o String[] references optional
+}
+
+/** The law or standard a matter rests on. */
+concept LegalReference {
+  @description("A short id documents cite, e.g. gs-143-129")
+  o String id
+  o String citation
+  o ReferenceKind kind
+  @description("What it governs here")
+  o String subject
+  o String url optional
+}
+
+enum ReferenceKind {
+  o STATUTE
+  o ORDINANCE
+  o STANDARD
+  o POLICY
+}
+
+/** A group of the terms' properties the Town gathers together, at one phase -- a section of the intake form. */
+concept IntakeSection {
+  o String title
+  o String phase
+  o String[] fields
+  o String note optional
+}
