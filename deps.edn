@@ -2,4 +2,32 @@
 ;; the classpath under its own name, e.g. (io/resource
 ;; "manager-employment-contract/package.json"), and a package's under
 ;; <package>/templates/<name>, e.g. "street-resurfacing/templates/contract".
-{:paths ["templates" "packages"]}
+;;
+;; runtime/src is the clause runtime the templates' logic is written against
+;; -- com.trustblocks.clause, .lifecycle, .runtime -- the same code the
+;; Trustblocks app runs and trustblocks-logic.js runs in the browser. See
+;; docs/runtime.md.
+{:paths ["templates" "packages" "runtime/src"]
+ :deps  {org.babashka/sci {:mvn/version "0.10.47"}}
+
+ :aliases
+ {;; The runtime's JVM tests. Usage: bb runtime-test
+  :runtime-test
+  {:extra-paths ["runtime/test"]
+   :extra-deps  {io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner" "-d" "runtime/test"]}
+
+  ;; Regenerates runtime/test/com/trustblocks/clause_parity.edn from the JVM.
+  ;; Usage: bb parity-fixtures -- only when the vocabulary is meant to change.
+  :parity-fixtures
+  {:extra-paths ["runtime/dev"]
+   :extra-deps  {cheshire/cheshire {:mvn/version "5.13.0"}}
+   :main-opts   ["-m" "clause-parity-fixtures"]}
+
+  ;; The runtime in ClojureScript: the parity test under Node, and
+  ;; trustblocks-logic.js. Usage: bb cljs-test, bb logic-bundle
+  :cljs
+  {:replace-deps  {thheller/shadow-cljs {:mvn/version "2.28.23"}
+                   org.babashka/sci     {:mvn/version "0.10.47"}}
+   :replace-paths ["runtime/src" "runtime/test"]
+   :main-opts     ["-m" "shadow.cljs.devtools.cli"]}}}

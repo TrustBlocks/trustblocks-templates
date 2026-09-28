@@ -1,8 +1,23 @@
 {:paths ["bb"]
- :tasks {:requires ([tasks])
+ :tasks {:requires ([tasks] [babashka.fs :as fs])
          check       {:doc  "Structure, logic, shared-model copies, CommonMark rules (no Node)"
                       :task (tasks/check)}
          build       {:doc  "Zip every template into dist/<name>@<version>.cta"
                       :task (tasks/build)}
          conformance {:doc  "Every template loads and drafts through Accord's own engine (npm install once)"
-                      :task (shell "node_modules/.bin/nbb" "dev/conformance.cljs")}}}
+                      :task (shell "node_modules/.bin/nbb" "dev/conformance.cljs")}
+
+         ;; The clause runtime (runtime/, docs/runtime.md).
+         runtime-test    {:doc  "The runtime's JVM tests, parity included"
+                          :task (clojure "-M:runtime-test")}
+         cljs-test       {:doc  "The parity test, compiled to ClojureScript and run under Node"
+                          :task (clojure "-M:cljs compile clause-test")}
+         logic-bundle    {:doc  "Build target/trustblocks-logic.js and test it as the playground's worker loads it"
+                          :task (do (clojure "-M:cljs release logic-bundle")
+                                    (fs/copy "target/cljs/logic/trustblocks-logic.js" "target/trustblocks-logic.js"
+                                             {:replace-existing true})
+                                    (shell "node --test runtime/test/js/logic_bundle_test.mjs")
+                                    (println "target/trustblocks-logic.js:"
+                                             (fs/size "target/trustblocks-logic.js") "bytes"))}
+         parity-fixtures {:doc  "Regenerate the parity fixture from the JVM -- only when the vocabulary is meant to change"
+                          :task (clojure "-M:parity-fixtures")}}}

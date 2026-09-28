@@ -81,6 +81,11 @@ and `:state ...` when the contract's state changes, both Concerto instances;
 it refuses by throwing. There is no clock, I/O or interop in the sandbox, so a
 clause's answer depends only on its inputs and an execution can be replayed.
 
+The sandbox is in this repository: [`runtime/`](docs/runtime.md) holds the
+clause vocabulary, the lifecycle and the step the Trustblocks app takes on
+every request -- the same code, compiled to `trustblocks-logic.js`, runs a
+template's logic in the browser, with the same answer to the character.
+
 ## Checking and building
 
 Needs [babashka](https://babashka.org); `bb conformance` also needs Node.
@@ -90,13 +95,20 @@ bb check          # structure, logic, shared-model copies, CommonMark rules
 bb build          # dist/<name>@<version>.cta for every template
 npm install       # once, for the Accord reference toolchain
 bb conformance    # every template, and every built archive, drafts through Accord's engine
+
+# The clause runtime -- needs the Clojure CLI too
+bb runtime-test   # its JVM tests, the parity fixture included
+bb cljs-test      # the parity test, compiled to ClojureScript, under Node
+bb logic-bundle   # target/trustblocks-logic.js, tested as the browser loads it
 ```
 
 ## Using the templates from Clojure
 
 `deps.edn` puts `templates/` and `packages/` on the classpath, so a
 template is a resource under its own name, and a package's under
-`<package>/templates/<name>`:
+`<package>/templates/<name>` -- and `runtime/src`, so the runtime is
+`com.trustblocks.clause`, `com.trustblocks.lifecycle` and
+`com.trustblocks.runtime`:
 
 ```clojure
 io.github.TrustBlocks/trustblocks-templates {:git/sha "..."}
