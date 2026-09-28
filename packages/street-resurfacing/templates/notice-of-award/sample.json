@@ -1,0 +1,8 @@
+{
+  "$class": "com.trustblocks.municipal.construction.noticeofaward@1.0.0.NoticeOfAward",
+  "noticeId": "china-grove-str-27-notice-of-award",
+  "contractNumber": "STR-27",
+  "responseDays": 14,
+  "responseDaysWritten": "fourteen",
+  "managerName": "Franklin D. Gover III"
+}

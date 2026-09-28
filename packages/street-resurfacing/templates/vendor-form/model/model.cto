@@ -1,0 +1,66 @@
+namespace com.trustblocks.municipal.construction.vendorform@1.0.0
+
+import org.accordproject.runtime@0.2.0.Request from https://models.accordproject.org/accordproject/runtime@0.2.0.cto
+
+/**
+ * The Vendor Information Form -- in Exhibit "E" of the STR-27 bid package:
+ * it sets a payee up in the Town's financial system, and Finance assigns the
+ * vendor number that each payment certificate names. One for each party the
+ * Town pays. Received and certified by the Finance Director; every blank is
+ * a field, including the Town's own.
+ */
+@template
+asset VendorInformationForm identified by vendorFormId {
+  o String vendorFormId
+  o String legalName optional
+  o String soleProprietorName optional
+  o String doingBusinessAs optional
+  @description("YES or NO")
+  o String northCarolinaCorporation regex=/^(YES|NO)$/ optional
+  @description("YES or NO")
+  o String registeredInNorthCarolina regex=/^(YES|NO)$/ optional
+  o String contractorLicenseNumber optional
+  o DateTime contractorLicenseExpiration optional
+  o String federalTaxId optional
+  o String quotationAddress optional
+  o String county optional
+  o String mailingAddress optional
+  o String remittanceAddress optional
+  o String invoicePaymentTerms optional
+  @description("Term discount, if any, explained")
+  o String termDiscount optional
+  o String managerName optional
+  o String managerPhone optional
+  o String managerEmail optional
+  o String contactName optional
+  o String contactPhone optional
+  o String contactEmail optional
+  o String accountsReceivableContact optional
+  o String accountsReceivablePhone optional
+  o String productsOrServices optional
+  // ---- For Town use only
+  o String townDepartmentContact optional
+  o DateTime townDepartmentDate optional
+  o String receivedInFinanceBy optional
+  o DateTime receivedInFinanceDate optional
+  @description("Assigned by Town Finance; the payment certificate names it")
+  o String vendorNumber optional
+}
+
+// ---- Lifecycle ------------------------------------------------------------------
+// Received by the Finance Director, who then assigns the vendor number.
+
+/** A vendor form's place in its lifecycle. */
+concept VendorFormState identified by vendorFormId {
+  o String vendorFormId
+  o String status
+}
+
+/** The Finance Director certifies the form was received. */
+transaction VendorFormReceived extends Request {
+}
+
+/** Finance assigns the vendor number. */
+transaction VendorNumberAssigned extends Request {
+  o String vendorNumber
+}

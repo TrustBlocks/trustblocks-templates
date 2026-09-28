@@ -1,0 +1,33 @@
+namespace com.trustblocks.municipal.construction.noticeofaward@1.0.0
+
+/**
+ * The Notice of Award and Acceptance of Notice -- Exhibit "I" of the STR-27
+ * bid package: the Town tells the successful bidder the Council accepted its
+ * bid, and asks for the executed contract, certifications, W-9, insurance and
+ * bonds within the response days. Every blank is a field; sample.json is the
+ * form as issued.
+ */
+@template
+asset NoticeOfAward identified by noticeId {
+  o String noticeId
+  @description("The Contractor, as addressed")
+  o String addresseeName optional
+  o String addresseeStreet optional
+  o String addresseeCityStateZip optional
+  @description("The Town's contract number, e.g. STR-27")
+  o String contractNumber
+  o DateTime invitationToBidDate optional
+  @description("The Town Council meeting that accepted the bid")
+  o DateTime councilMeetingDate optional
+  @description("Days after the Notice within which the contract documents are due")
+  o Integer responseDays
+  o String responseDaysWritten
+  o DateTime dated optional
+  o String managerName
+  o String managerSignature optional
+  // ---- Acceptance of Notice (the Contractor)
+  o DateTime acceptedDate optional
+  o String acceptorName optional
+  o String acceptorSignature optional
+  o String acceptanceWitnessTitle optional
+}

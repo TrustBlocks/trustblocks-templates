@@ -12,6 +12,13 @@ Contract No. STR-27, in
 | --- | --- | --- |
 | [`contract`](templates/contract/) | `com.trustblocks.municipal.construction@1.0.0` | The contract as executed: the matter's terms |
 | [`pay-application`](templates/pay-application/) | `com.trustblocks.municipal.construction.payapplication@1.0.0` | Exhibit "E"'s Contractor Pay Request, one per month, with its lifecycle and clause |
+| [`vendor-form`](templates/vendor-form/) | `…construction.vendorform@1.0.0` | Exhibit "E"'s Vendor Information Form, one per payee; received, then vendor number assigned |
+| [`notice-of-award`](templates/notice-of-award/) | `…construction.noticeofaward@1.0.0` | Exhibit "I"; contract documents due within its response days |
+| [`notice-to-proceed`](templates/notice-to-proceed/) | `…construction.noticetoproceed@1.0.0` | Exhibit "J"; the Completion Date counts from its Commence Date |
+| [`bid-bond`](templates/bid-bond/), [`performance-bond`](templates/performance-bond/), [`payment-bond`](templates/payment-bond/) | `…construction.bidbond@1.0.0` etc. | Exhibit "F", on the Town's forms |
+
+The whole matter -- every document, modelled or only received -- is in
+[`manifest.edn`](manifest.edn); see [`docs/manifest.md`](../../docs/manifest.md).
 
 ## How the documents relate
 
@@ -56,7 +63,8 @@ Shown on the timeline and the dashboards; never acted on (see
 
 | Template | Deadline | Counted | Met by |
 |---|---|---|---|
-| contract | Completion Date (Sec. 5); liquidated damages may be assessed after (GC 22) | Notice to Proceed Date + `completionDays` | -- |
+| notice to proceed | Completion Date (Sec. 5); liquidated damages may be assessed after (GC 22) | Commence Date + `completionDays` | -- |
+| notice of award | Contract documents due | the Notice's date + `responseDays` (14) | -- |
 | pay application | Inspection Certificate due (GC 18(b)) | entering RECEIVED + the contract's `inspectionPeriodDays` | INSPECTED onward, or RETURNED |
 | pay application | Payment due (Sec. 6) | entering APPROVED + 30 days | PAID |
 

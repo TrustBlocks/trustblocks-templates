@@ -1,0 +1,13 @@
+{
+    "name": "street-resurfacing-vendor-form",
+    "version": "0.1.0",
+    "description": "The Vendor Information Form -- in Exhibit \"E\" of the STR-27 bid package:",
+    "accordproject": {
+        "runtime": "typescript",
+        "template": "contract",
+        "cicero": "^2.0.0"
+    },
+    "trustblocks": {
+        "lifecycle": "lifecycle.json"
+    }
+}

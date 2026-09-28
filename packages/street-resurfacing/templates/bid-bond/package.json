@@ -1,0 +1,10 @@
+{
+    "name": "street-resurfacing-bid-bond",
+    "version": "0.1.0",
+    "description": "The Bid Bond -- Exhibit \"F\" of the STR-27 bid package: bid security of five",
+    "accordproject": {
+        "runtime": "typescript",
+        "template": "contract",
+        "cicero": "^2.0.0"
+    }
+}

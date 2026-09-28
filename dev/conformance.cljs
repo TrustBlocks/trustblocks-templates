@@ -19,6 +19,7 @@
 
 (ns conformance
   (:require ["@accordproject/cicero-core" :refer [Template]]
+            ["@accordproject/concerto-core" :refer [ModelManager Factory Serializer]]
             ["@accordproject/template-engine" :refer [TemplateArchiveProcessor]]
             ["fs" :as fs]
             ["path" :as path]
@@ -92,6 +93,28 @@
                     (mapcat #(template-dirs (path/join "packages" % "templates"))
                             (sort (fs/readdirSync "packages"))))))))
 
+(defn- check-manifests
+  "Each built package manifest (dist/<package>/manifest.json) against
+  shared/model/manifest.cto, by Concerto itself. Returns true/false."
+  []
+  (let [mm (ModelManager. #js {:strict true})
+        _  (.addCTOModel mm (fs/readFileSync "shared/model/manifest.cto" "utf8") "manifest.cto")
+        serializer (Serializer. (Factory. mm) mm)
+        files (when (fs/existsSync "dist")
+                (->> (fs/readdirSync "dist")
+                     (map #(path/join "dist" % "manifest.json"))
+                     (filter fs/existsSync)))]
+    (every? true?
+            (for [f files]
+              (try
+                (.fromJSON serializer (js/JSON.parse (fs/readFileSync f "utf8")))
+                (println (str "  ok    " f))
+                true
+                (catch :default e
+                  (println (str "  FAIL  " f))
+                  (println (str "        " (.-message e)))
+                  false))))))
+
 (p/let [arg  (first *command-line-args*)
         root (or arg "templates/ and packages/")
         dirs (all-template-dirs arg)]
@@ -102,7 +125,7 @@
                               (when (seq archives) (str ", " (count archives) " built archive(s) in dist/"))))
             oks (p/all (concat (map check dirs)
                                (map (fn [[d a]] (check d a)) archives)))]
-      (when (some false? oks)
+      (when (or (some false? oks) (not (check-manifests)))
         (println)
         (println "A template does not load or draft through Accord's own toolchain.")
         (println "See docs/templatemark-conformance.md for what the engine requires.")

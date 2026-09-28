@@ -38,6 +38,7 @@ templates/<name>/          one Accord template directory each
   request.json             a request the clause answers, for templates that execute
 packages/<package>/
   README.md                the package: its documents and how they relate
+  manifest.edn             what a matter made from it consists of -- see docs/manifest.md
   templates/<name>/        one Accord template directory per document type, laid out as above
 shared/model/              canonical copies of models more than one template carries
 sources/                   the source documents templates were derived from

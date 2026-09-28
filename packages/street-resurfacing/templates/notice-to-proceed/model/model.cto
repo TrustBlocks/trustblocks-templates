@@ -1,0 +1,28 @@
+namespace com.trustblocks.municipal.construction.noticetoproceed@1.0.0
+
+/**
+ * The Notice to Proceed (Date of Availability) -- Exhibit "J" of the STR-27
+ * bid package: the Town's written notice of the Commence Date, from which the
+ * Completion Date counts. Its scope follows Sec. 2 of the Contract, as the
+ * Town Attorney's redline corrected it. Every blank is a field.
+ */
+@template
+asset NoticeToProceed identified by noticeId {
+  o String noticeId
+  @description("The Contractor, as addressed")
+  o String addresseeName optional
+  o String addresseeStreet optional
+  o String addresseeCityStateZip optional
+  @description("The Town's contract number, e.g. STR-27")
+  o String contractNumber
+  @description("The scope, as stated in Sec. 2 of the Contract")
+  o String projectDescription
+  @description("The Commence Date: work begins on or before it")
+  o DateTime commencementDate optional
+  o String purchaseOrderNumbers optional
+  @description("Calendar days from the Commence Date to the Completion Date")
+  o Integer completionDays
+  o DateTime dated optional
+  o String managerName
+  o String managerSignature optional
+}

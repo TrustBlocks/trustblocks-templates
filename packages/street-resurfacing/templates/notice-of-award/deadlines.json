@@ -1,0 +1,12 @@
+{
+  "$class": "com.trustblocks.deadline@1.0.0.Deadlines",
+  "deadlines": [
+    {
+      "$class": "com.trustblocks.deadline@1.0.0.Deadline",
+      "name": "Contract documents due",
+      "description": "The executed contract, Exhibit B affidavit and certifications, W-9, Certificate of Insurance, Performance and Payment Bonds and any power of attorney, within the response days after the Notice of Award.",
+      "fromField": "dated",
+      "daysField": "responseDays"
+    }
+  ]
+}

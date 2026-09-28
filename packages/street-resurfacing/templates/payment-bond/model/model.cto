@@ -1,0 +1,36 @@
+namespace com.trustblocks.municipal.construction.paymentbond@1.0.0
+
+/**
+ * The Payment Bond -- Exhibit "F" of the STR-27 bid package, on the Town's form,
+ * executed by the Contractor as principal and a surety authorized in North
+ * Carolina, in one hundred percent (100%) of the contract price (G.S. 44A-26).
+ * Every blank is a field.
+ */
+@template
+asset PaymentBond identified by bondId {
+  o String bondId
+  o DateTime executionDate optional
+  @description("Name and address of the Principal (the Contractor)")
+  o String principal optional
+  @description("Name and address of the Surety")
+  o String surety optional
+  @description("The penal sum: one hundred percent (100%) of the contract price")
+  o Double amount optional
+  @description("The Town's contract number, e.g. STR-27")
+  o String contractNumber
+  // ---- Execution
+  o String principalWitness optional
+  @description("Name of individual and trade name, partnership, corporation, or joint venture")
+  o String principalName optional
+  o String principalSignature optional
+  o String principalTitle optional
+  o String principalAttestSignature optional
+  o String principalAttestTitle optional
+  o String suretyWitness optional
+  o String suretyName optional
+  @description("The surety's Attorney-in-Fact")
+  o String suretySignature optional
+  @description("N.C. Licensed Resident Agent")
+  o String countersignature optional
+  o String attorneyInFactAddress optional
+}
