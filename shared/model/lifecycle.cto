@@ -53,6 +53,8 @@ concept Transition {
 concept Certification {
   o String credential
   o String authority
+  @description("The authority that may waive this requirement. Absent means it cannot be waived; a waiver the contract's text does not grant is a release finding")
+  o String waivableBy optional
 }
 
 /**
